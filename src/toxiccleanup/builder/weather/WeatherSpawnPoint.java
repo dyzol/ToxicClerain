@@ -7,8 +7,6 @@ import toxiccleanup.engine.timing.TickTimer;
 import toxiccleanup.builder.GameState;
 import toxiccleanup.builder.Tickable;
 
-import java.util.ArrayList;
-
 /**
  * A WeatherSpawnPoint is responsible for managing timed creation of preset weather Phenomena.
  * It takes a given {@link Positionable} position, everytime the given {@link TickTimer} finishes
