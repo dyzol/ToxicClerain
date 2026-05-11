@@ -18,7 +18,7 @@ public class WeatherSpawnPoint implements Tickable {
 
     private final TickTimer timer;
     private final Spawner spawner;
-    private final ArrayList<Positionable> positions = new ArrayList<>();
+    private final Positionable position; // single position, not list
 
     /**
      * Constructs a new instance of {@link WeatherSpawnPoint}
@@ -28,22 +28,20 @@ public class WeatherSpawnPoint implements Tickable {
      * @param timer    - the timer that will be used to determine when to call the {@link Spawner}.
      * @param spawner  - the {@link Spawner} we intend to call whenever the {@link TickTimer}
      *                 is finished.
+     * @ensures getPosition() returns a copy of the given position
      */
     public WeatherSpawnPoint(Positionable position, TickTimer timer, Spawner spawner) {
-        this.positions.add(position);
+        this.position = position;
         this.timer = timer;
         this.spawner = spawner;
     }
-
 
     /**
      * @return the correctly stored position of the {@link WeatherSpawnPoint} in question.
      */
     public Positionable getPosition() {
-        Positionable position = positions.getFirst();
         return new Position(position.getX(), position.getY());
     }
-
 
     /**
      * Advances component state by one game tick using engine and game context.
