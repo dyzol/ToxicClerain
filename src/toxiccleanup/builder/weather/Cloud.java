@@ -1,13 +1,8 @@
 package toxiccleanup.builder.weather;
 
-import toxiccleanup.engine.EngineState;
-import toxiccleanup.engine.art.sprites.SpriteGroup;
 import toxiccleanup.engine.game.Positionable;
-import toxiccleanup.engine.timing.RepeatingTimer;
 import toxiccleanup.engine.timing.TickTimer;
-import toxiccleanup.builder.GameState;
 import toxiccleanup.builder.SpriteGallery;
-import toxiccleanup.builder.entities.GameEntity;
 
 /**
  * <p> A {@link Cloud} is a weather phenomena that will move to the left, over time. </p>

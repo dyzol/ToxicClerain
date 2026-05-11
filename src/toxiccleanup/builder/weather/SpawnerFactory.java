@@ -22,66 +22,51 @@ import toxiccleanup.engine.timing.RepeatingTimer;
  * </p>
  */
 public class SpawnerFactory {
+
+    private static final double SPAWN_MULTIPLIER = 5.5;
+
+    /**
+     * Constructs a new {@link WeatherSpawnPoint} based on the symbol at the given position.
+     *
+     * @param position the position to place the spawn point at
+     * @param symbol   the map symbol (c, C, r, R, a, A, l, L, or _)
+     * @return a new WeatherSpawnPoint, or null if symbol is '_'
+     * @throws IllegalArgumentException if symbol is not recognized
+     */
     public static WeatherSpawnPoint fromSymbol(Positionable position, char symbol) {
-        WeatherSpawnPoint result = null;
-        if (symbol == 'c') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer(Cloud.SPAWN_TIME),
-                    (Positionable pos) -> new Cloud(pos)
-            );
-        } else if (symbol == 'C') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer((int) (Cloud.SPAWN_TIME * 5.5)),
-                    (Positionable pos) -> new Cloud(pos)
-            );
-        } else if (symbol == 'r') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer(RainCloud.SPAWN_TIME),
-                    (Positionable pos) -> new RainCloud(pos)
-            );
-        } else if (symbol == 'R') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer((int) (RainCloud.SPAWN_TIME * 5.5)),
-                    (Positionable pos) -> new RainCloud(pos)
-            );
-        } else if (symbol == 'a') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer(Cloud.SPAWN_TIME),
-                    (Positionable pos) -> new AcidCloud(pos)
-            );
-        } else if (symbol == 'A') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer((int) (AcidCloud.SPAWN_TIME * 5.5)),
-                    (Positionable pos) -> new AcidCloud(pos)
-            );
-        } else if (symbol == 'l') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer(Lightning.SPAWN_TIME),
-                    (Positionable pos) -> new Lightning(pos)
-            );
-        } else if (symbol == 'L') {
-            result = new WeatherSpawnPoint(
-                    position,
-                    new RepeatingTimer((int) (Lightning.SPAWN_TIME * 5.5)),
-                    (Positionable pos) -> new Lightning(pos)
-            );
-        } else if (symbol == '_') {
-            return null;
-        }
-        if (result == null) {
-            throw new IllegalArgumentException("Symbol does not represent a tile.");
-        }
-        return result;
+        if (symbol == '_') return null;
 
+        // Determine if uppercase (slower spawn rate)
+        boolean isUppercase = Character.isUpperCase(symbol);
+        char lowerSymbol = Character.toLowerCase(symbol);
+
+        // Base spawn time and spawner (for normal rate)
+        int baseSpawnTime;
+        Spawner spawner = switch (lowerSymbol) {
+            case 'c' -> {
+                baseSpawnTime = Cloud.SPAWN_TIME;
+                yield Cloud::new;
+            }
+            case 'r' -> {
+                baseSpawnTime = RainCloud.SPAWN_TIME;
+                yield RainCloud::new;
+            }
+            case 'a' -> {
+                baseSpawnTime = AcidCloud.SPAWN_TIME;
+                yield AcidCloud::new;
+            }
+            case 'l' -> {
+                baseSpawnTime = Lightning.SPAWN_TIME;
+                yield Lightning::new;
+            }
+            default -> throw new IllegalArgumentException("Unknown symbol: '" + symbol + "'");
+        };
+
+        // Multiply spawn time if uppercase
+        int finalSpawnTime = isUppercase
+                ? (int) (baseSpawnTime * SPAWN_MULTIPLIER)
+                : baseSpawnTime;
+
+        return new WeatherSpawnPoint(position, new RepeatingTimer(finalSpawnTime), spawner);
     }
-
-
 }
-
