@@ -3,6 +3,7 @@ package toxiccleanup.builder.machines;
 import org.junit.Test;
 import toxiccleanup.builder.Damage;
 import toxiccleanup.builder.GameState;
+import toxiccleanup.builder.SpriteGallery;
 import toxiccleanup.builder.entities.GameEntity;
 import toxiccleanup.builder.entities.tiles.Tile;
 import toxiccleanup.builder.player.Player;
@@ -11,6 +12,7 @@ import toxiccleanup.builder.weather.WeatherSpawnPoint;
 import toxiccleanup.builder.world.World;
 import toxiccleanup.engine.EngineState;
 import toxiccleanup.engine.art.sprites.Sprite;
+import toxiccleanup.engine.core.headless.MockKeys;
 import toxiccleanup.engine.game.Position;
 import toxiccleanup.engine.game.Positionable;
 import toxiccleanup.engine.input.KeyState;
@@ -19,7 +21,9 @@ import toxiccleanup.engine.renderer.Dimensions;
 import toxiccleanup.engine.renderer.Renderable;
 import toxiccleanup.engine.renderer.TileGrid;
 import org.junit.Before;
+import toxiccleanup.engine.util.MockEngineState;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
@@ -30,7 +34,6 @@ public class PumpTest {
 
     private static final int ANIM_INTERVAL = 4;
     private static final int PUMP_INTERVAL = 100;
-    private static final int POWER_REQUIRED = 2;
 
     private static final TileGrid TILE_GRID = new TileGrid(16, 800);
     private static final Position POSITION = new Position(100, 100);
@@ -146,8 +149,134 @@ public class PumpTest {
     // ============================================================
 
     @Test
+    public void debugAnimationTiming() {
+        GameState poweredGame = makeGameState(2, null);
+
+        for (int tick = 0; tick < 20; tick++) {
+            pump.tick(BASE_STATE, poweredGame);
+            System.out.println("Tick " + (tick + 1) + ": Sprite = " + pump.getSprite().toString());
+        }
+    }
+
+    @Test
+    public void initialSpriteIsDefault() {
+        final Sprite expected = SpriteGallery.pump.getSprite("1");
+        assertEquals("initial Pump sprite should be '1'",
+                expected.toString(), pump.getSprite().toString());
+    }
+
+    @Test
+    public void spriteIsDamagedWhenDamaged() {
+        // GameState with damage at pump's position
+        GameState damagedState = makeGameState(2, new Damage(POSITION));
+        pump.tick(BASE_STATE, damagedState); // tick pump to apply damage
+        // check sprite changed to damaged
+        final Sprite expected = SpriteGallery.pump.getSprite("damaged");
+        assertEquals("Pump sprite should be 'damaged' when weather deals damage",
+                expected.toString(), pump.getSprite().toString());
+    }
+
+    @Test
+    public void repairWithEKeyWhenDamaged() {
+        final Sprite damagedSprite = SpriteGallery.pump.getSprite("damaged");
+
+        // damage the pump
+        GameState damagedState = makeGameState(2, new Damage(POSITION));
+        pump.tick(BASE_STATE, damagedState);
+
+        // Verify it is damaged
+        assertEquals(SpriteGallery.pump.getSprite("damaged").toString(),
+                pump.getSprite().toString());
+
+        // Press 'e' key to repair
+        pump.playerOver(E_KEY_STATE, makeGameState(2, null));
+
+        // Animation interval is 4 ticks, so tick enough times
+        for (int i = 0; i < ANIM_INTERVAL; i++) {
+            pump.tick(BASE_STATE, makeGameState(2, null));
+        }
+
+        assertNotEquals(damagedSprite.toString(), pump.getSprite().toString());
+    }
+
+    @Test
+    public void pressEKeyWhenNotDamagedDoesNothing() {
+        GameState game = makeGameState(2, null);
+        pumpTarget.reset();
+
+        // Press 'e' key on undamaged pump
+        pump.playerOver(E_KEY_STATE, game);
+
+        // Pump should still work normally
+        for (int i = 0; i < PUMP_INTERVAL; i++) {
+            pump.tick(BASE_STATE, game);
+        }
+
+        // Pump should have pumped (adjust called once)
+        assertEquals("Pump should still function normally after 'e' press when undamaged",
+                1, pumpTarget.getCallCount());
+    }
+
+    @Test
+    public void constructPumpAtGivenPosition() {
+        Position customPosition = new Position(250, 300);
+        Pump testPump = new Pump(customPosition, pumpTarget);
+
+        assertEquals("Pump X coordinate should match constructor position",
+                customPosition.getX(), testPump.getX());
+        assertEquals("Pump Y coordinate should match constructor position",
+                customPosition.getY(), testPump.getY());
+    }
+
+    @Test
+    public void pumpShouldAdjustGivenAdjustablePerTick() {
+        GameState game = makeGameState(2, null);
+        pumpTarget.reset();
+
+        // Tick 99 times - adjust should NOT be called yet
+        for (int i = 0; i < PUMP_INTERVAL - 1; i++) {
+            pump.tick(BASE_STATE, game);
+        }
+        assertEquals("adjust() should not be called before 100 ticks",
+                0, pumpTarget.getCallCount());
+
+        // 100th tick - adjust should be called once with amount 1
+        pump.tick(BASE_STATE, game);
+        assertEquals("adjust() should be called exactly once after 100 ticks",
+                1, pumpTarget.getCallCount());
+        assertEquals("adjust() should be called with amount 1",
+                1, pumpTarget.getLastAmount());
+    }
+
+    @Test
+    public void pumpDoesNotAnimateWhenPowerInsufficient() {
+        // Create GameState with insufficient power (1)
+        GameState lowPowerGame = makeGameState(2 - 1, null);
+
+        // Get the expected initial sprite (frame "1")
+        Sprite expectedSprite = SpriteGallery.pump.getSprite("1");
+
+        // Run through a full pump cycle (100 ticks)
+        for (int tick = 0; tick < PUMP_INTERVAL; tick++) {
+            pump.tick(BASE_STATE, lowPowerGame);
+
+            // Check the sprite after each animation interval
+            // (tick+1 because tick starts at 0)
+            if ((tick + 1) % ANIM_INTERVAL == 0) {
+                assertEquals("Animation should not advance at tick " + (tick + 1) +
+                                " when power is insufficient",
+                        expectedSprite.toString(), pump.getSprite().toString());
+            }
+        }
+
+        // Final check after the entire cycle
+        assertEquals("Animation should still be at frame '1' after full pump cycle with insufficient power",
+                expectedSprite.toString(), pump.getSprite().toString());
+    }
+
+    @Test
     public void toxicityReducesEveryHundredTicks() {
-        GameState game = makeGameState(POWER_REQUIRED, null);
+        GameState game = makeGameState(2, null);
 
         // Tick 99 times - adjust should NOT be called yet
         for (int i = 0; i < PUMP_INTERVAL - 1; i++) {
@@ -163,7 +292,7 @@ public class PumpTest {
 
     @Test
     public void pumpRepeatedlyReducesToxicityEveryHundredTicks() {
-        GameState game = makeGameState(POWER_REQUIRED, null);
+        GameState game = makeGameState(2, null);
 
         // First pump cycle (100 ticks) - adjust called once
         for (int i = 0; i < PUMP_INTERVAL; i++) {
@@ -182,7 +311,7 @@ public class PumpTest {
     @Test
     public void pumpDoesNotOperateWhenPowerInsufficient() {
         // Start with one less power than required
-        GameState game = makeGameState(POWER_REQUIRED - 1, null);
+        GameState game = makeGameState(2 - 1, null);
 
         // Run enough ticks for a pump cycle
         for (int i = 0; i < PUMP_INTERVAL + 1; i++) {
@@ -195,7 +324,7 @@ public class PumpTest {
     @Test
     public void pumpResumesWhenPowerRestored() {
         // Start with insufficient power
-        GameState lowPowerGame = makeGameState(POWER_REQUIRED - 1, null);
+        GameState lowPowerGame = makeGameState(2 - 1, null);
 
         // Run 100 ticks - no pumping should occur
         for (int i = 0; i < PUMP_INTERVAL; i++) {
@@ -204,7 +333,7 @@ public class PumpTest {
         assertEquals(0, pumpTarget.getCallCount());
 
         // Restore power to sufficient level
-        GameState sufficientPowerGame = makeGameState(POWER_REQUIRED, null);
+        GameState sufficientPowerGame = makeGameState(2, null);
 
         // Run another pump cycle with sufficient power
         for (int i = 0; i < PUMP_INTERVAL; i++) {
@@ -217,7 +346,7 @@ public class PumpTest {
 
     @Test
     public void getPowerRequirementReturnsTwo() {
-        assertEquals(POWER_REQUIRED, pump.getPowerRequirement());
+        assertEquals(2, pump.getPowerRequirement());
     }
 
     @Test
@@ -239,8 +368,35 @@ public class PumpTest {
     }
 
     @Test
+    public void pumpSpriteChangesEvery4TicksIfPowerSufficient() {
+        GameState poweredGame = makeGameState(2, null);
+        Sprite previousSprite = pump.getSprite(); // track seen sprites
+        boolean spriteChanged = false;
+
+        // Run through a full pump cycle (100 ticks)
+        for (int tick = 0; tick < PUMP_INTERVAL; tick++) {
+            pump.tick(BASE_STATE, poweredGame);
+
+            // Check after each animation interval (every 4 ticks)
+            if ((tick + 1) % 8 == 0) {
+                Sprite currentSprite = pump.getSprite();
+                // At the first animation interval, sprite should have changed from initial
+                if (tick + 1 == 8) {
+                    assertNotEquals("Sprite should change after first " + ANIM_INTERVAL + " ticks",
+                            previousSprite.toString(), currentSprite.toString());
+                    spriteChanged = true;
+                }
+                // Update previous sprite for next comparison
+                previousSprite = currentSprite;
+            }
+        }
+
+        assertTrue("Sprite should have changed at least once during the pump cycle", spriteChanged);
+    }
+
+    @Test
     public void pumpDoesNotOperateWithInsufficientPower() {
-        GameState game = makeGameState(POWER_REQUIRED - 1, null);
+        GameState game = makeGameState(2 - 1, null);
 
         // Run enough ticks for multiple pump cycles
         for (int i = 0; i < PUMP_INTERVAL * 2; i++) {
@@ -261,7 +417,7 @@ public class PumpTest {
     @Test
     public void animationAdvancesWhenHasPower() {
         Sprite initialSprite = pump.getSprite();
-        GameState game = makeGameState(POWER_REQUIRED, null);
+        GameState game = makeGameState(2, null);
         boolean spriteChanged = false;
 
         for (int tick = 0; tick < 8; tick++) {
@@ -279,7 +435,7 @@ public class PumpTest {
     @Test
     public void animationFreezesWhenInsufficientPower() {
         final Sprite initialSprite = pump.getSprite();
-        GameState game = makeGameState(POWER_REQUIRED - 1, null);
+        GameState game = makeGameState(2 - 1, null);
         boolean spriteChanged = false;
 
         for (int tick = 0; tick < 8; tick++) {

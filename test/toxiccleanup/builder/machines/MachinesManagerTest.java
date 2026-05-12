@@ -21,6 +21,15 @@ public class MachinesManagerTest {
     // ========== POWER MANAGEMENT TESTS ==========
 
     @Test
+    public void testCanSpawnPump() {
+        manager.setPower(Pump.COST);
+        Pump pump = manager.spawnPump(testPosition, null);
+
+        assertNotNull(pump);
+        assertEquals(0, manager.getPower());
+    }
+
+    @Test
     public void testDefaultConstructorSetsPowerTo14() {
         assertEquals(14, manager.getPower());
     }
