@@ -21,7 +21,7 @@ import toxiccleanup.builder.entities.GameEntity;
  *
  * @provided
  */
-public class Lightning extends GameEntity implements Damaging {
+public class Lightning extends GameEntity implements Damaging, Attractable {
     public static final int SPAWN_TIME = 120;
     private static final int LIFESPAN = 60;
     private final TickTimer lifespanTimer = new FixedTimer(LIFESPAN);
@@ -106,5 +106,13 @@ public class Lightning extends GameEntity implements Damaging {
             animFrame = finalAnimFrameIndex;
         }
         setSprite(art.getSprite(animFrame + ""));
+    }
+
+    @Override
+    public boolean attractTo(Positionable targetPosition) {
+        // Lightning can be attracted
+        setX(targetPosition.getX());
+        setY(targetPosition.getY());
+        return true;
     }
 }

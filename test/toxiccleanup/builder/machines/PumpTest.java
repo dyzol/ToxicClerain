@@ -149,16 +149,6 @@ public class PumpTest {
     // ============================================================
 
     @Test
-    public void debugAnimationTiming() {
-        GameState poweredGame = makeGameState(2, null);
-
-        for (int tick = 0; tick < 20; tick++) {
-            pump.tick(BASE_STATE, poweredGame);
-            System.out.println("Tick " + (tick + 1) + ": Sprite = " + pump.getSprite().toString());
-        }
-    }
-
-    @Test
     public void initialSpriteIsDefault() {
         final Sprite expected = SpriteGallery.pump.getSprite("1");
         assertEquals("initial Pump sprite should be '1'",

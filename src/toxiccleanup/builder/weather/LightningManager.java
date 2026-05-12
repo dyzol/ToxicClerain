@@ -21,17 +21,17 @@ public class LightningManager {
      */
     public void attractLightning(Positionable position) {
         for (GameEntity weather : phenomena) {
-            if (weather instanceof Lightning) {
-                final Lightning bolt = (Lightning) weather;
-                int deltaX = position.getX() - bolt.getX();
-                int deltaY = position.getY() - bolt.getY();
-                final int distance = (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                if (distance <= LightningRod.RADIUS) {
-                    bolt.setX(position.getX());
-                    bolt.setY(position.getY());
-                }
+            if (!(weather instanceof Attractable)) {
+                continue; // skip non-attractable weather
+            }
+            int deltaX = position.getX() - weather.getX();
+            int deltaY = position.getY() - weather.getY();
+            final int distance = (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            if (distance <= LightningRod.RADIUS) {
+                weather.setX(position.getX());
+                weather.setY(position.getY());
             }
         }
-
     }
 }
