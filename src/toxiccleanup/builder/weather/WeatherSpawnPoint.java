@@ -1,5 +1,6 @@
 package toxiccleanup.builder.weather;
 
+import toxiccleanup.builder.entities.GameEntity;
 import toxiccleanup.engine.EngineState;
 import toxiccleanup.engine.game.Position;
 import toxiccleanup.engine.game.Positionable;
@@ -52,7 +53,6 @@ public class WeatherSpawnPoint implements Tickable {
     @Override
     public void tick(EngineState state, GameState game) {
         timer.tick();
-
         if (timer.isFinished()) {
             game.getWeather().addWeather(spawner.spawn(getPosition()));
         }

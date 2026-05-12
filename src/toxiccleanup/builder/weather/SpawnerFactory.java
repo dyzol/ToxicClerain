@@ -34,7 +34,9 @@ public class SpawnerFactory {
      * @throws IllegalArgumentException if symbol is not recognized
      */
     public static WeatherSpawnPoint fromSymbol(Positionable position, char symbol) {
-        if (symbol == '_') return null;
+        if (symbol == '_') {
+            return null;
+        }
 
         // Determine if uppercase (slower spawn rate)
         boolean isUppercase = Character.isUpperCase(symbol);

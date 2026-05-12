@@ -16,6 +16,7 @@ import toxiccleanup.builder.SpriteGallery;
  *
  */
 public class RainCloud extends Cloudable {
+    public static final int SPAWN_TIME = 300;
     /**
      * Constructs a new RainCloud at the given position.
      *

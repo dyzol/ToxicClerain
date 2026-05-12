@@ -15,6 +15,7 @@ import toxiccleanup.builder.SpriteGallery;
  * @provided
  */
 public class Cloud extends Cloudable {
+    public static final int SPAWN_TIME = 300;
     /**
      * Constructs a new Cloud at the given position.
      *

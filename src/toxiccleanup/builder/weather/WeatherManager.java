@@ -33,10 +33,14 @@ import java.util.List;
  * </ul>
  */
 public class WeatherManager implements Weather {
-    private final List<WeatherSpawnPoint> spawnPoints = new ArrayList<>();
     private final List<GameEntity> phenomena = new ArrayList<>();
+    private final WeatherSpawnManager spawnManager = new WeatherSpawnManager();
+    private final WeatherQueryManager queryManager;
+    private final LightningManager lightningManager;
 
     public WeatherManager() {
+        this.queryManager = new WeatherQueryManager(phenomena);
+        this.lightningManager = new LightningManager(phenomena);
     }
 
     /**
@@ -46,7 +50,7 @@ public class WeatherManager implements Weather {
      * @param spawnPoint - spawn point we wish top use
      */
     public void addSpawnPoint(WeatherSpawnPoint spawnPoint) {
-        spawnPoints.add(spawnPoint);
+        spawnManager.addSpawnPoint(spawnPoint);
     }
 
     /**
@@ -69,19 +73,7 @@ public class WeatherManager implements Weather {
      */
     @Override
     public boolean isObscuring(Dimensions dimensions, Positionable position) {
-        //work out the grid we are checking against
-        int gridX = dimensions.pixelToTile(position.getX());
-        int gridY = dimensions.pixelToTile(position.getY());
-
-        for (GameEntity weather : phenomena) {
-            final int weatherGridX = dimensions.pixelToTile(weather.getX());
-            final int weatherGridY = dimensions.pixelToTile(weather.getY());
-
-            if (gridX == weatherGridX && gridY == weatherGridY && weather instanceof Obscuring) {
-                return true;
-            }
-        }
-        return false;
+        return queryManager.isObscuring(dimensions, position);
     }
 
     /**
@@ -94,21 +86,13 @@ public class WeatherManager implements Weather {
      * returns null.
      */
     public Damage getDamage(Dimensions dimensions, Positionable position) {
-        //work out the grid we are checking against
-        int gridX = dimensions.pixelToTile(position.getX());
-        int gridY = dimensions.pixelToTile(position.getY());
-
-        for (GameEntity weather : phenomena) {
-            final int weatherGridX = dimensions.pixelToTile(weather.getX());
-            final int weatherGridY = dimensions.pixelToTile(weather.getY());
-
-            if (gridX == weatherGridX && gridY == weatherGridY && weather instanceof Damaging) {
-                return ((Damaging) weather).getDamage();
-            }
-        }
-        return null;
+        return queryManager.getDamage(dimensions, position);
     }
 
+    /**
+     * required by Damaging interface, kept as-is for compatibility with tests
+     * @return null
+     */
     @Override
     public Damage getDamage() {
         return null;
@@ -123,19 +107,7 @@ public class WeatherManager implements Weather {
      */
     @Override
     public boolean isDamaging(Dimensions dimensions, Positionable position) {
-        //work out the grid we are checking against
-        int gridX = dimensions.pixelToTile(position.getX());
-        int gridY = dimensions.pixelToTile(position.getY());
-
-        for (GameEntity weather : phenomena) {
-            final int weatherGridX = dimensions.pixelToTile(weather.getX());
-            final int weatherGridY = dimensions.pixelToTile(weather.getY());
-
-            if (gridX == weatherGridX && gridY == weatherGridY && weather instanceof Damaging) {
-                return true;
-            }
-        }
-        return false;
+        return queryManager.isDamaging(dimensions, position);
     }
 
     /**
@@ -147,19 +119,7 @@ public class WeatherManager implements Weather {
      */
     @Override
     public void applyLightningRod(Positionable position) {
-        for (GameEntity weather : phenomena) {
-            if (weather instanceof Lightning) {
-                final Lightning bolt = (Lightning) weather;
-                int deltaX = position.getX() - bolt.getX();
-                int deltaY = position.getY() - bolt.getY();
-                final int distance = (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                if (distance <= LightningRod.RADIUS) {
-                    bolt.setX(position.getX());
-                    bolt.setY(position.getY());
-                }
-            }
-        }
-
+        lightningManager.attractLightning(position);
     }
 
     /**
@@ -172,9 +132,7 @@ public class WeatherManager implements Weather {
      */
     @Override
     public void tick(EngineState state, GameState game) {
-        for (WeatherSpawnPoint spawnPoint : spawnPoints) {
-            spawnPoint.tick(state, game);
-        }
+        spawnManager.tick(state, game);
         for (GameEntity weather : phenomena) {
             weather.tick(state, game);
         }
@@ -214,7 +172,7 @@ public class WeatherManager implements Weather {
         final StringBuilder sb = new StringBuilder();
         sb.append("WeatherManager:[\n");
         sb.append("Phenomena:" + phenomena.size() + "\n");
-        sb.append("SpawnPoints:" + spawnPoints.size() + "\n");
+        sb.append("SpawnPoints:" + spawnManager.getSpawnPoints().size() + "\n");
         sb.append("]\n");
         return sb.toString();
     }

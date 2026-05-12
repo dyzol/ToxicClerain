@@ -16,6 +16,7 @@ import toxiccleanup.builder.SpriteGallery;
  *
  */
 public class AcidCloud extends Cloudable implements Damaging {
+    public static final int SPAWN_TIME = 300;
     /**
      * Constructs a new AcidCloud at the given position.
      *
