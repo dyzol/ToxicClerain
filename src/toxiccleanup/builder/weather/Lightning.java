@@ -29,6 +29,8 @@ public class Lightning extends GameEntity implements Damaging, Attractable {
     private final int finalAnimFrameIndex;
     private final TickTimer animTimer;
     private int animFrame = 1;
+    private static final int DAMAGE_FRAME_START = 5;
+    private static final int DAMAGE_FRAME_END = 6;
 
     private static final SpriteGroup art = SpriteGallery.lightning;
 
@@ -91,8 +93,7 @@ public class Lightning extends GameEntity implements Damaging, Attractable {
      * @return if the {@link Lightning} is currently in its state that would deal {@link Damage}
      */
     public boolean isDamaging() {
-        final boolean isActiveHitFrames = animFrame == 5 || animFrame == 6;
-        return isActiveHitFrames;
+        return animFrame == DAMAGE_FRAME_START || animFrame == DAMAGE_FRAME_END;
     }
 
 
@@ -108,11 +109,13 @@ public class Lightning extends GameEntity implements Damaging, Attractable {
         setSprite(art.getSprite(animFrame + ""));
     }
 
+    /** Moves a weather phenomenon to target position when attracted by lightning rod
+     *
+     * @param targetPosition the position to attract to
+     */
     @Override
-    public boolean attractTo(Positionable targetPosition) {
-        // Lightning can be attracted
+    public void attractTo(Positionable targetPosition) {
         setX(targetPosition.getX());
         setY(targetPosition.getY());
-        return true;
     }
 }

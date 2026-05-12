@@ -10,7 +10,6 @@ public interface Attractable {
      * Attracts this weather phenomenon to the given position.
      *
      * @param targetPosition the position to attract to
-     * @return true if the phenomenon was moved, false otherwise
      */
-    boolean attractTo(Positionable targetPosition);
+    void attractTo(Positionable targetPosition);
 }

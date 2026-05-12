@@ -29,8 +29,7 @@ public class LightningManager {
             final int distance = (int) Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
             if (distance <= LightningRod.RADIUS) {
-                weather.setX(position.getX());
-                weather.setY(position.getY());
+                ((Attractable) weather).attractTo(position);
             }
         }
     }
