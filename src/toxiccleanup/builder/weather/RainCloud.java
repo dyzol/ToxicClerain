@@ -1,7 +1,6 @@
 package toxiccleanup.builder.weather;
 
 import toxiccleanup.engine.game.Positionable;
-import toxiccleanup.engine.timing.TickTimer;
 import toxiccleanup.builder.SpriteGallery;
 
 
@@ -17,6 +16,7 @@ import toxiccleanup.builder.SpriteGallery;
  */
 public class RainCloud extends Cloudable {
     public static final int SPAWN_TIME = 300;
+
     /**
      * Constructs a new RainCloud at the given position.
      *
@@ -24,15 +24,5 @@ public class RainCloud extends Cloudable {
      */
     public RainCloud(Positionable position) {
         super(position, SpriteGallery.raincloud);
-    }
-
-    /**
-     * Constructs a new RainCloud with custom movement timer (for testing).
-     *
-     * @param position the position to place the rain cloud at
-     * @param movementTimer custom movement timer
-     */
-    public RainCloud(Positionable position, TickTimer movementTimer) {
-        super(position, SpriteGallery.raincloud, movementTimer);
     }
 }

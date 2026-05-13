@@ -6,9 +6,20 @@ import toxiccleanup.engine.game.Positionable;
 import toxiccleanup.engine.renderer.Dimensions;
 import java.util.List;
 
+/** Handles queries about weather effects at specific positions
+ * This class is responsible for answering questions about whether a
+ * given tile position is obscured by clouds or affected by damaging weather.
+ * This class is package-private (default visibility) and is only used
+ * internally by {@link WeatherManager}. It is not part of the public API.
+ */
 public class WeatherQueryManager {
     private final List<GameEntity> phenomena;
 
+    /** Constructs a new WeatherQueryManager
+     * The manager maintains a reference to the active weather phenomena
+     * list but does not own it. The list must be managed externally.
+     * @param phenomena list of active weather phenomena to query
+     */
     WeatherQueryManager(List<GameEntity> phenomena) {
         this.phenomena = phenomena;
     }
@@ -83,11 +94,5 @@ public class WeatherQueryManager {
             }
         }
         return null;
-    }
-
-    private boolean isAtPosition(GameEntity weather, Dimensions dimensions, int gridX, int gridY) {
-        int weatherGridX = dimensions.pixelToTile(weather.getX());
-        int weatherGridY = dimensions.pixelToTile(weather.getY());
-        return gridX == weatherGridX && gridY == weatherGridY;
     }
 }

@@ -3,8 +3,10 @@ package toxiccleanup.builder.weather;
 import toxiccleanup.engine.game.Positionable;
 import toxiccleanup.builder.Damage;
 
-/**
- * Lightning Type Damage, can not deal damage to lightning rods specifically.
+/** Represents damage caused by lightning strikes.
+ *
+ * <p>This damage type has a type identifier of {@value #TYPE}. Other classes
+ * may use this identifier to distinguish lightning damage from other damage types.
  */
 public class LightningDamage extends Damage {
 
@@ -13,8 +15,11 @@ public class LightningDamage extends Damage {
     /**
      * Constructs a new LightningDamage at the given position.
      *
+     * <p>The damage type is automatically set to "lightning" to allow
+     * lightning rods to identify and ignore this damage type.
+     *
      * @param position the position where the lightning damage occurs
-     * @requires position != null
+     * @requires position not null
      * @ensures getType().equals(TYPE) and getX() == position.getX(), getY() == position.getY()
      */
     public LightningDamage(Positionable position) {

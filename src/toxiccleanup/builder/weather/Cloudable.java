@@ -23,7 +23,6 @@ import toxiccleanup.builder.entities.GameEntity;
  */
 public abstract class Cloudable extends GameEntity implements Obscuring {
     // constants
-    public static final int SPAWN_TIME = 300;
     public static final int MOVEMENT_TIME = 1;
     private static final int SPEED = 2;
     private static final int ANIMATION_INTERVAL = 12;
@@ -32,7 +31,7 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
     private final TickTimer movementTimer;
     private final TickTimer animTimer;
     private int currentFrame = 1;
-    private int maxFrames;
+    private final int maxFrames;
     private final SpriteGroup art;
 
     /**

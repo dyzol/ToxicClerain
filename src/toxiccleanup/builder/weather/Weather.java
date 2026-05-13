@@ -17,7 +17,7 @@ import toxiccleanup.builder.ui.RenderableGroup;
  *   <li>Handling lightning rod interactions</li>
  * </ul>
  *
- * <p><b>Class Invariant:</b> All implementations must maintain non-null
+ * @invariant all implementations must maintain non-null
  * collections of spawn points and active weather phenomena.
  *
  * @provided

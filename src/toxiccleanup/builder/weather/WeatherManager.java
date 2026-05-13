@@ -38,6 +38,9 @@ public class WeatherManager implements Weather {
     private final WeatherQueryManager queryManager;
     private final LightningManager lightningManager;
 
+    /** Constructor that initialises submanagers: queryManager and lightningManager
+     *
+     */
     public WeatherManager() {
         this.queryManager = new WeatherQueryManager(phenomena);
         this.lightningManager = new LightningManager(phenomena);
@@ -146,9 +149,7 @@ public class WeatherManager implements Weather {
      */
     @Override
     public List<Renderable> render() {
-        final ArrayList<Renderable> renderables = new ArrayList<>();
-        renderables.addAll(phenomena);
-        return renderables;
+        return new ArrayList<>(phenomena);
     }
 
     /**
@@ -169,12 +170,7 @@ public class WeatherManager implements Weather {
      */
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder();
-        sb.append("WeatherManager:[\n");
-        sb.append("Phenomena:" + phenomena.size() + "\n");
-        sb.append("SpawnPoints:" + spawnManager.getSpawnPoints().size() + "\n");
-        sb.append("]\n");
-        return sb.toString();
+        return "WeatherManager:[\n" + "Phenomena:" + phenomena.size() + "\n" + "SpawnPoints:" + spawnManager.getSpawnPoints().size() + "\n" + "]\n";
     }
 
 }

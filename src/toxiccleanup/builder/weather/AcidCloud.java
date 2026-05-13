@@ -2,7 +2,6 @@ package toxiccleanup.builder.weather;
 
 import toxiccleanup.engine.game.Positionable;
 import toxiccleanup.engine.renderer.Dimensions;
-import toxiccleanup.engine.timing.TickTimer;
 import toxiccleanup.builder.Damage;
 import toxiccleanup.builder.SpriteGallery;
 
@@ -17,6 +16,7 @@ import toxiccleanup.builder.SpriteGallery;
  */
 public class AcidCloud extends Cloudable implements Damaging {
     public static final int SPAWN_TIME = 300;
+
     /**
      * Constructs a new AcidCloud at the given position.
      *
@@ -24,16 +24,6 @@ public class AcidCloud extends Cloudable implements Damaging {
      */
     public AcidCloud(Positionable position) {
         super(position, SpriteGallery.acidcloud);
-    }
-
-    /**
-     * Constructs a new AcidCloud with custom movement timer (for testing).
-     *
-     * @param position the position to place the acid cloud at
-     * @param movementTimer custom movement timer
-     */
-    public AcidCloud(Positionable position, TickTimer movementTimer) {
-        super(position, SpriteGallery.acidcloud, movementTimer);
     }
 
     /**
