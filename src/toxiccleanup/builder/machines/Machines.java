@@ -6,6 +6,12 @@ import toxiccleanup.builder.Tickable;
 /**
  * Interface for managing the various machines that exist in this game
  * + the associated power system.
+ * The {@code Machines} interface provides methods for:
+ * <ul>
+ *   <li>Managing the shared power resource (adjust, query, set)</li>
+ *   <li>Spawning machines (solar panels, teleporters, pumps, lightning rods)</li>
+ *   <li>Teleporter destination selection</li>
+ * </ul>
  *
  * @provided
  */
@@ -24,6 +30,7 @@ public interface Machines extends Adjustable, Tickable {
      * Sets the current power level to the given value, clamped to [0, {@link #getMaxPower()}].
      * Values below 0 are clamped to 0; values above the maximum are clamped to the maximum.
      *
+     * @ensures getPower() returns number between 0 and max power
      * @param value the power level to set.
      */
     void setPower(int value);
@@ -58,11 +65,21 @@ public interface Machines extends Adjustable, Tickable {
      * If the current power is at least 3, this method deducts 3 power and returns the new SolarPanel.
      * Otherwise, this method returns null.
      *
+     * @requires position not null
      * @param position the position we wish to spawn the {@link SolarPanel} at.
      * @return created {@link SolarPanel} or null.
      */
     SolarPanel spawnSolarPanel(Positionable position);
 
+    /**
+     * Attempts to create a {@link LightningRod} at the given location and return it.
+     * Should only create if there is enough power to pay the LightningRod COST (1).
+     * If the current power is at least 1, this method deducts 1 power and returns new LightningRod
+     * Otherwise, method returns null.
+     * @requires position not null
+     * @param position position where to spawn the {@link LightningRod}
+     * @return new {@link LightningRod} if power sufficient, or null
+     */
     LightningRod spawnLightningRod(Positionable position);
 
     /**

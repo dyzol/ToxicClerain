@@ -7,19 +7,21 @@ package toxiccleanup.builder.machines;
  */
 public interface Disableable {
     /**
-     * Returns if this disableable Object is or is not in its disabled state.
+     * Returns whether this object is currently in a disabled state.
      *
-     * @return if this disableable Object is or is not in its disabled state.
+     * @return true if disabled, false otherwise (enabled)
      */
     boolean isDisabled();
 
     /**
-     * Sets the Disableable Object to it's disabled state.
+     * Sets the Disableable Object to disabled stated.
+     * @ensures isDisabled returns true
      */
     void disable();
 
     /**
-     * Sets the Disableable Object to its enabled state.
+     * Sets the Disableable Object to enabled state.
+     * @ensures isDisabled returns false
      */
     void enable();
 }

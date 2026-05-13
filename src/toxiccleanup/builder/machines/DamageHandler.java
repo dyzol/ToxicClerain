@@ -11,13 +11,17 @@ import toxiccleanup.builder.Damage;
 public class DamageHandler implements Damageable {
     private boolean damaged = false;
 
+    /**
+     * Constructs a new DamageHandler in an undamaged state.
+     */
     public DamageHandler() {
+        // empty so that damaged starts as false
     }
 
     /**
-     * Returns if this damageable Object is or is not in its damaged state.
+     * Returns whether this handler is in a damaged state.
      *
-     * @return if this damageable Object is or is not in its damaged state.
+     * @return true if damaged, false if undamaged
      */
     @Override
     public boolean isDamaged() {
@@ -26,6 +30,8 @@ public class DamageHandler implements Damageable {
 
     /**
      * Sets the Damageable Object to it's damaged state.
+     * @ensures isDamaged returns true
+     * @param dmg the damage object (ignored by this implementation)
      */
     @Override
     public void setDamage(Damage dmg) {
@@ -34,6 +40,7 @@ public class DamageHandler implements Damageable {
 
     /**
      * Sets the Damageable Object to it's undamaged
+     * @ensures isDamaged returns false
      */
     @Override
     public void repairDamage() {

@@ -29,7 +29,7 @@ public class MachinesManager implements Machines {
     private static final int DEFAULT_POWER = 14;
     private static final int maxPower = MachinesManager.DEFAULT_POWER;
     private final ArrayList<Positionable> teleporterPositions = new ArrayList<>();
-    private TickTimer teleporterCooldown = new RepeatingTimer(TELEPORTER_COOLDOWN);
+    private final TickTimer teleporterCooldown = new RepeatingTimer(TELEPORTER_COOLDOWN);
     private static final int TELEPORTER_COOLDOWN = 20;
     private final RandomNumberGenerator random = new RandomNumberGenerator();
     private int power;
@@ -193,7 +193,8 @@ public class MachinesManager implements Machines {
         }
         final ArrayList<Positionable> validPositions = new ArrayList<>();
         for (Positionable position : teleporterPositions) {
-            final boolean notOverlappingExcludedPosition = (position.getX() != excludedPosition.getX()
+            final boolean notOverlappingExcludedPosition =
+                    (position.getX() != excludedPosition.getX()
                     && position.getY() != excludedPosition.getY());
             if (notOverlappingExcludedPosition) {
                 validPositions.add(position);
