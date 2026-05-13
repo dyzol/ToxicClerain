@@ -96,7 +96,6 @@ public class Lightning extends GameEntity implements Damaging, Attractable {
         return animFrame == DAMAGE_FRAME_START || animFrame == DAMAGE_FRAME_END;
     }
 
-
     /**
      * Handles updating the anim to the next sprite,
      * adjusting our internal index and resetting it to the start if we go past the final index.

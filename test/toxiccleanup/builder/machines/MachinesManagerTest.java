@@ -18,7 +18,7 @@ public class MachinesManagerTest {
         testPosition = new Position(5, 5);
     }
 
-    // ========== POWER MANAGEMENT TESTS ==========
+    // ========== Pump TESTS ==========
 
     @Test
     public void testCanSpawnPump() {
@@ -28,6 +28,17 @@ public class MachinesManagerTest {
         assertNotNull(pump);
         assertEquals(0, manager.getPower());
     }
+
+    @Test
+    public void testCannotSpawnPumpInsufficientPower() {
+        manager.setPower(Pump.COST - 1);
+        Pump pump = manager.spawnPump(testPosition, null);
+
+        assertNull(pump);
+        assertEquals(Pump.COST - 1, manager.getPower());
+    }
+
+    // ========== Constructor/power TESTS ==========
 
     @Test
     public void testDefaultConstructorSetsPowerTo14() {
@@ -195,5 +206,37 @@ public class MachinesManagerTest {
 
         assertNull(teleporter);
         assertEquals(Teleporter.COST - 1, manager.getPower());
+    }
+
+    // ========== Teleporter teleportation TESTS ==========
+    @Test
+    public void testGetNextTeleporterPositionWithNoOtherTeleporterReturnsItself() {
+        // edge case: should return itself
+        manager.setPower(10);
+        Position pos = new Position(5, 5);
+        manager.spawnTeleporter(pos);
+
+        Positionable result = manager.getNextTeleporterPosition(pos);
+
+        assertEquals("Only one teleporter, x should be the same", pos.getX(), result.getX());
+        assertEquals("Only one teleporter, y should be the same", pos.getY(), result.getY());
+    }
+
+    @Test
+    public void testSpawnLightningRodExactPower() {
+        manager.setPower(LightningRod.COST);
+        LightningRod rod = manager.spawnLightningRod(testPosition);
+
+        assertNotNull(rod);
+        assertEquals(0, manager.getPower());
+    }
+
+    @Test
+    public void testSpawnLightningRodInsufficientPower() {
+        manager.setPower(LightningRod.COST - 1);
+        LightningRod rod = manager.spawnLightningRod(testPosition);
+
+        assertNull(rod);
+        assertEquals(LightningRod.COST - 1, manager.getPower());
     }
 }

@@ -1,6 +1,5 @@
 package toxiccleanup.builder.weather;
 
-import toxiccleanup.builder.entities.GameEntity;
 import toxiccleanup.engine.EngineState;
 import toxiccleanup.engine.game.Position;
 import toxiccleanup.engine.game.Positionable;
@@ -35,7 +34,9 @@ public class WeatherSpawnPoint implements Tickable {
         this.spawner = spawner;
     }
 
-    /**
+    /** Returns copy of stored position
+     *
+     * @ensures result.getX == this.position.getX and same for Y
      * @return the correctly stored position of the {@link WeatherSpawnPoint} in question.
      */
     public Positionable getPosition() {
