@@ -35,7 +35,8 @@ public class ToxicCleanupGameState implements GameState {
      * @param machines the machine manager, used to query power and spawn machines.
      */
 
-    public ToxicCleanupGameState(World world, PlayerManager player, Machines machines, Weather weather) {
+    public ToxicCleanupGameState(World world, PlayerManager player, Machines machines,
+                                 Weather weather) {
         this.world = world;
         this.player = player;
         this.machines = machines;

@@ -105,7 +105,7 @@ public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
     /**
      * Attempts to spawn a {@link Pump} and place it on this field.
      *
-     * @param spawner
+     * @param spawner the machine system used to spawn the pump
      */
     private void attemptSpawnPump(Machines spawner) {
         if (isToxic()) {
