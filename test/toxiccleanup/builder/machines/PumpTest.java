@@ -12,7 +12,6 @@ import toxiccleanup.builder.weather.WeatherSpawnPoint;
 import toxiccleanup.builder.world.World;
 import toxiccleanup.engine.EngineState;
 import toxiccleanup.engine.art.sprites.Sprite;
-import toxiccleanup.engine.core.headless.MockKeys;
 import toxiccleanup.engine.game.Position;
 import toxiccleanup.engine.game.Positionable;
 import toxiccleanup.engine.input.KeyState;
@@ -21,9 +20,7 @@ import toxiccleanup.engine.renderer.Dimensions;
 import toxiccleanup.engine.renderer.Renderable;
 import toxiccleanup.engine.renderer.TileGrid;
 import org.junit.Before;
-import toxiccleanup.engine.util.MockEngineState;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
