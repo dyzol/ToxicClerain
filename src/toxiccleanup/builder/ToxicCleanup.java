@@ -2,8 +2,6 @@ package toxiccleanup.builder;
 
 import toxiccleanup.builder.entities.tiles.Dirt;
 import toxiccleanup.builder.entities.tiles.Tile;
-import toxiccleanup.builder.entities.tiles.ToxicField;
-import toxiccleanup.builder.machines.LightningRod;
 import toxiccleanup.builder.machines.MachinesManager;
 import toxiccleanup.builder.machines.Teleporter;
 import toxiccleanup.builder.player.PlayerManager;
@@ -43,7 +41,21 @@ public class ToxicCleanup implements Game {
     private final Weather weather;
     private final RepeatingTimer damageTimer = new RepeatingTimer(DAMAGE_INTERVAL);
 
-    public ToxicCleanup(Dimensions dimensions, Positionable starterTeleporterPosition, String worldFilepath, String weatherFilepath) throws IOException, WorldLoadException {
+    /**
+     * Constructs a ToxicCleanup game instance with custom world and weather map files.
+     * This constructor allows specifying custom map files for the world and weather
+     * systems, useful for testing or custom game scenarios.
+     *
+     * @param dimensions the dimensions of the game window
+     * @param starterTeleporterPosition the tile position for the initial teleporter
+     * @param worldFilepath path to the world map file
+     * @param weatherFilepath path to the weather map file
+     * @throws IOException if a map file cannot be read
+     * @throws WorldLoadException if a map file contains invalid data
+     */
+    public ToxicCleanup(Dimensions dimensions, Positionable starterTeleporterPosition,
+                        String worldFilepath, String weatherFilepath) throws IOException,
+                        WorldLoadException {
         final int halfTileOffset = dimensions.tileSize() / 2;
         final int playerX = dimensions.tileSize() + halfTileOffset;
         final int playerY = dimensions.tileSize() + halfTileOffset;
@@ -167,7 +179,8 @@ public class ToxicCleanup implements Game {
      * @provided
      */
     public void tick(EngineState engine) {
-        final GameState game = new ToxicCleanupGameState(world, playerManager, machineManager, weather);
+        final GameState game = new ToxicCleanupGameState(world, playerManager,
+                                                        machineManager, weather);
 
         world.tick(engine, game);
 
@@ -193,7 +206,8 @@ public class ToxicCleanup implements Game {
     }
 
     /**
-     * Returns all renderables for the current frame in back-to-front draw order. For example the tiles must be
+     * Returns all renderables for the current frame in back-to-front draw order.
+     * For example the tiles must be
      * before the player in the resultant list.
      *
      * <p><span style="color:#9B59B6;">Provided:</span> Creates a new list of renderables and adds

@@ -20,5 +20,5 @@ public interface Spawner {
      * @param position the position where the new entity should be created
      * @return a newly created {@link GameEntity} instance at the specified position
      */
-    public GameEntity spawn(Positionable position);
+    GameEntity spawn(Positionable position);
 }
