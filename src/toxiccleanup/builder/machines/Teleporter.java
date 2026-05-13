@@ -22,7 +22,9 @@ import toxiccleanup.builder.weather.Weather;
  * <p>Costs {@value COST} power units to build. When powered, cycles through a sprite animation
  * every 12 ticks. If power drops below the requirement, the animation pauses. Rendered using
  * {@link SpriteGallery#teleporter}.
- *
+ * @invariant animTimer and damageHandler are never null
+ * @invariant animFrame is always between 1 and finalAnimFrameIndex inclusive
+ * @invariant Power requirement equals {@value COST}
  * @provided
  */
 public class Teleporter extends GameEntity implements PlayerOverHook, Powered, Damageable {
@@ -36,11 +38,13 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
     private final int finalAnimFrameIndex;
     private final TickTimer animTimer;
     private int animFrame = 1;
-    final private DamageHandler damageHandler;
+    private final DamageHandler damageHandler;
     
     /**
      * Constructs a new Teleporter at the given position.
-     *
+     * Teleporter starts with animation frame "1" and an initial
+     * undamaged state.
+     * @requires position not null
      * @param position the position we wish to spawn this Teleporter at.
      */
     public Teleporter(Positionable position) {
@@ -56,6 +60,9 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
      * and the machine system has at least {@value COST} power units, the displayed sprite advances
      * to the next animation frame. If power is insufficient, the animation pauses.
      *
+     * @requires state and game not null
+     * @ensures if damaged, sprite shows "damaged"
+     * @ensures if powered and anim timer finishes, animation advances
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The current state of the game, providing access to the machine power system.
@@ -99,6 +106,7 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
      * {@link Machines#getNextTeleporterPosition(Positionable)}.
      * Power is checked but NOT deducted on use.
      *
+     * @requires state and game not null
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
@@ -124,6 +132,8 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
     /**
      * Handles updating the anim to the next sprite,
      * adjusting our internal index and resetting it to the start if we go past the final index.
+     * @ensures animFrame is incremented by 1 (or reset to 1 if at end)
+     * and the sprite is updated accordingly.
      */
     private void updateArt() {
         animFrame += 1;
@@ -134,9 +144,9 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
     }
 
     /**
-     * Returns if this damageable Object is or is not in its damaged state.
+     * Returns whether this teleporter is in a damaged state.
      *
-     * @return if this damageable Object is or is not in its damaged state.
+     * @return true if damaged, false otherwise
      */
     @Override
     public boolean isDamaged() {
@@ -144,7 +154,11 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
     }
 
     /**
-     * Sets the Damageable Object to it's damaged state.
+     * Sets the Damageable Object to its damaged state.
+     * When damaged, the teleporter shows a "damaged" sprite and
+     * cannot be used for teleportation until repaired.
+     *
+     * @param dmg the damage object describing what damaged this teleporter
      */
     @Override
     public void setDamage(Damage dmg) {
@@ -152,7 +166,9 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
     }
 
     /**
-     * Sets the Damageable Object to it's undamaged
+     * Repairs the teleporter, returning it to an undamaged state.
+     * After repair, the teleporter can be used for teleportation again
+     * and resumes normal animation.
      */
     @Override
     public void repairDamage() {

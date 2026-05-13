@@ -38,7 +38,9 @@ public class SolarPanel extends GameEntity implements PlayerOverHook {
     /**
      * Constructs a new SolarPanel at the given position using a default internal
      * {@link TickTimer} set to fire every (120) frames.
+     * The solar panel starts with its "default" sprite and an undamaged state.
      *
+     * @requires position not null
      * @param position the position we wish to spawn the {@link SolarPanel} at.
      */
     public SolarPanel(Positionable position) {
@@ -48,6 +50,14 @@ public class SolarPanel extends GameEntity implements PlayerOverHook {
         damageHandler = new DamageHandler();
     }
 
+    /**Constructs a new SolarPanel with a custom damage handler (for testing purposes)
+     * This constructor allows dependency injection of a {@link DamageHandler}
+     * for unit testing. The solar panel starts with its "default" sprite.
+     * @requires position not null
+     * @requires damageHandler not null
+     * @param position the position where this solar panel should be placed
+     * @param damageHandler the damage handler to use for tracking damage state
+     */
     public SolarPanel(Positionable position, DamageHandler damageHandler) {
         super(position);
         setSprite(solarPanelArt.getSprite("default"));
@@ -55,11 +65,17 @@ public class SolarPanel extends GameEntity implements PlayerOverHook {
         this.damageHandler = damageHandler;
     }
 
-    /**
-     * Called every game tick to advance the solar panel's internal timer. When the timer fires
-     * (every 120 ticks), adds 1 power to the shared machine power system via
+    /** Advances solar panel's internal timer by one tick.
+     * When the timer fires (every 120 ticks), adds 1 power to the shared machine power system via
      * {@link Machines#adjust(int)}.
+     * Checks for damage from weather – if damaged, shows "damaged" sprite
+     * Checks if obscured by clouds – if obscured, shows "off" sprite
+     * If neither damaged nor obscured, shows "default" sprite
      *
+     * @requires state not null
+     * @requires game not null
+     * @ensures sprite reflects current state (damaged/obscured/default)
+     * @ensures once timer finished, power increases by {@value POWER_GAIN}
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, providing access to the machine power system.

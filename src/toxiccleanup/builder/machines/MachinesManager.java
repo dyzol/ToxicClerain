@@ -42,19 +42,6 @@ public class MachinesManager implements Machines {
         power = MachinesManager.DEFAULT_POWER;
     }
 
-
-    /**
-     * Here for testability purposes. Allows us to inject an alternative {@link TickTimer}
-     * to override the default internal timer used for the teleportation systems cooldown.
-     *
-     * @param teleporterCooldownTimer the new {@link TickTimer} we want our {@link MachinesManager}
-     *                                to use instead of the default internal {@link TickTimer}.
-     */
-    public MachinesManager(TickTimer teleporterCooldownTimer) {
-        this.teleporterCooldown = teleporterCooldownTimer;
-    }
-
-
     /**
      * Constructs a new {@link MachinesManager} with the given amount of starting power.
      * Maximum power is fixed at the default (14).
