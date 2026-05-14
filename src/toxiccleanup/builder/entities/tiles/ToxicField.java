@@ -25,7 +25,8 @@ import toxiccleanup.engine.game.Positionable;
  * </ul>
  *
  * <p>Rendered using {@link SpriteGallery#toxicField}.
- *
+ * @invariant toxicity always between 0 and MAX_TOXICITY inclusive
+ * @invariant art is never null
  */
 public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
     private static final SpriteGroup art = SpriteGallery.toxicField;
@@ -54,7 +55,9 @@ public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
      *   <li>Toxicity = 0: fully cleaned - flowers restored. All stacked entities (e.g. the
      *       {@link Pump}) are marked for removal.</li>
      * </ul>
-     *
+     * @ensures toxicity is clamped between 0 and MAX_TOXICITY
+     * @ensures sprite is updated to reflect new toxicity level
+     * @ensures if toxicity reaches 0, all stacked entities are marked for removal
      * @param amount the amount to subtract from the current toxicity level (typically 1).
      */
     @Override
@@ -82,6 +85,8 @@ public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
 
     /**
      * Marks all stacked entities on this {@link ToxicField} for removal.
+     * This is called when field toxicity reaches 0
+     * @ensures pump is marked for removal
      */
     private void clearField() {
         for (Entity entity : this.getStackedEntities()) {
@@ -90,7 +95,7 @@ public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
     }
 
     /**
-     * Handles updating the visual representation of the {@link ToxicField} based on internal state.
+     * Handles updating the visual representation of the {@link ToxicField} based on internal state
      */
     private void updateArt() {
         final String spriteName = switch (toxicity) {
@@ -104,7 +109,9 @@ public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
 
     /**
      * Attempts to spawn a {@link Pump} and place it on this field.
-     *
+     * A pump can only be spawned if the field is still toxic (not already cleaned).
+     * @requires spawner not null
+     * @ensures if successful, pump is stacked on this tile
      * @param spawner the machine system used to spawn the pump
      */
     private void attemptSpawnPump(Machines spawner) {
@@ -125,6 +132,8 @@ public class ToxicField extends Tile implements PlayerOverHook, Adjustable {
      * attempts to place a {@link Pump} on this tile via the machine system.
      * - If pump placement succeeds, the pump is stacked on this tile; otherwise, tile state is unchanged.
      *
+     * @requires state not null
+     * @requires game not null
      * @param state current engine input/state.
      * @param game  current game state.
      */
