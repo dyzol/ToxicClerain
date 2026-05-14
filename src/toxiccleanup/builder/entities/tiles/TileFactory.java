@@ -33,6 +33,7 @@ public class TileFactory {
      * @return A new tile at the given x,y coordinate of the type specified by the symbol.
      * @throws IllegalArgumentException If symbol does not correspond to a tile.
      * @requires position.getX() >= 0, position.getY() >= 0
+     * @requires symbol not null
      */
     public static Tile fromSymbol(Positionable position, char symbol) {
         assert position.getX() >= 0 && position.getY() >= 0;

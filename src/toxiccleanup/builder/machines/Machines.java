@@ -29,7 +29,7 @@ public interface Machines extends Adjustable, Tickable {
     /**
      * Sets the current power level to the given value, clamped to [0, {@link #getMaxPower()}].
      * Values below 0 are clamped to 0; values above the maximum are clamped to the maximum.
-     *
+     * @requires value > 0
      * @ensures getPower() returns number between 0 and max power
      * @param value the power level to set.
      */
@@ -53,7 +53,7 @@ public interface Machines extends Adjustable, Tickable {
      * Returns whether the current power level is at least {@code powerRequirement}. Used by
      * machines such as {@link Pump} and {@link Teleporter} to decide whether they can animate
      * or perform their action this tick.
-     *
+     * @requires powerRequirement not null
      * @param powerRequirement the minimum number of power units needed.
      * @return {@code true} if current power &ge; {@code powerRequirement}; {@code false} otherwise.
      */
@@ -86,7 +86,7 @@ public interface Machines extends Adjustable, Tickable {
      * Attempts to create a {@link Teleporter} at the given location and return it.
      * Should only create if there is enough power to pay the {@link Teleporter} COST (2).
      * Otherwise, should return null
-     *
+     * @requires position not null
      * @param position the position we wish to spawn the {@link Teleporter} at.
      * @return created {@link Teleporter} or null.
      */
@@ -100,6 +100,7 @@ public interface Machines extends Adjustable, Tickable {
      *
      * @param position   position we wish to spawn the pump at.
      * @param adjustable the adjustable we wish the pump to hold a reference to.
+     * @requires position and adjustable not null
      * @return newly created {@link Pump}, or null if there is insufficient power
      */
     Pump spawnPump(Positionable position, Adjustable adjustable);
@@ -112,6 +113,7 @@ public interface Machines extends Adjustable, Tickable {
      *
      * @param excludedPosition the position of the teleporter the player is currently on;
      *                         excluded from the result when other options exist.
+     * @requires excludedPosition not null
      * @return a {@link Positionable} representing the destination teleporter's position.
      */
     Positionable getNextTeleporterPosition(Positionable excludedPosition);

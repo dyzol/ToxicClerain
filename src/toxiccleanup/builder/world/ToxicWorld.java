@@ -33,6 +33,8 @@ public class ToxicWorld implements RenderableGroup, Tickable, World {
      * @param position   the pixel position to look up (e.g. the player's current position).
      * @param dimensions the window dimensions used for pixel-to-tile conversion.
      * @return all tiles occupying the same grid cell as {@code position}; empty if none.
+     * @requires position not null
+     * @requires dimensions not null
      */
     @Override
     public List<Tile> tilesAtPosition(Positionable position, Dimensions dimensions) {
@@ -95,6 +97,8 @@ public class ToxicWorld implements RenderableGroup, Tickable, World {
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension.
      * @param game  The state of the game, including the player and world.
+     * @requires state not null
+     * @requires game not null
      */
     @Override
     public void tick(EngineState state, GameState game) {

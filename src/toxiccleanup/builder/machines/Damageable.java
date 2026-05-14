@@ -19,6 +19,7 @@ public interface Damageable {
 
     /**
      * Sets this object to a damaged state.
+     * @requires dmg not null
      * @param dmg the damage object describing what caused the damage
      */
     void setDamage(Damage dmg);

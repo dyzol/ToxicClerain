@@ -60,6 +60,7 @@ public class Cleaner extends GameEntity {
      *
      * @param direction The direction to move in.
      * @param amount    How many pixels to move the player.
+     * @requires direction either north, south, east, or west
      * @requires amount > 0
      */
     public void move(Direction direction, int amount) {
@@ -90,7 +91,7 @@ public class Cleaner extends GameEntity {
      * Switches the cleaner's displayed sprite to the 'dead' state. Called by
      * {@link PlayerManager} when the player's HP reaches 0. Once set, the sprite remains
      * in the 'dead' state for the remainder of the game.
-     *
+     * @ensures player sprite is dead (like a skull)
      */
     public void setDeadSprite() {
         setSprite(art.getSprite("dead"));
@@ -104,6 +105,7 @@ public class Cleaner extends GameEntity {
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, included for interface compliance; not needed here.
+     * @requires state and gmae not null
      */
     @Override
     public void tick(EngineState state, GameState game) {

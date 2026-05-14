@@ -32,6 +32,8 @@ public class WeatherQueryManager {
      * @param position   - position requesting for the obscured status of
      * @return if the given title location should be currently obscured by the
      * internal weather system.
+     * @requires dimensions not null
+     * @requires position not null
      */
     public boolean isObscuring(Dimensions dimensions, Positionable position) {
         //work out the grid we are checking against
@@ -55,6 +57,8 @@ public class WeatherQueryManager {
      * @param dimensions - screen and tile dimensions
      * @param position   - position requesting for the damage status of
      * @return if the given tile location is experiencing damaging conditions.
+     * @requires dimensions not null
+     * @requires position not null
      */
     public boolean isDamaging(Dimensions dimensions, Positionable position) {
         //work out the grid we are checking against
@@ -80,6 +84,8 @@ public class WeatherQueryManager {
      * @param position   - position requesting for the damage status of
      * @return {@link Damage} the given tile location is currently experiencing otherwise
      * returns null.
+     * @requires dimensions not null
+     * @requires position not null
      */
     public Damage getDamage(Dimensions dimensions, Positionable position) {
         //work out the grid we are checking against

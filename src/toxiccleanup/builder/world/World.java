@@ -28,6 +28,8 @@ public interface World {
      * @param position   position we wish to check against for tiles in the world that overlap.
      * @param dimensions The dimensions of the world.
      * @return A list of all tiles occupying the given x, y position.
+     * @requires dimensions not null
+     * @requires position not null
      */
     List<Tile> tilesAtPosition(Positionable position, Dimensions dimensions);
 

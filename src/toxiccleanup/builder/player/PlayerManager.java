@@ -94,7 +94,8 @@ public class PlayerManager implements Player {
      * @param state the current state of the engine.
      * @param game  the current state of the game.
      * @ensures player moves within the game window boundaries, and only if alive.
-     *
+     * @requires state not null
+     * @requires game not null
      * @provided
      */
     @Override
@@ -112,7 +113,7 @@ public class PlayerManager implements Player {
      * {@link #tick} to decide whether to show the dead sprite and skip movement.
      *
      * @return {@code true} if the player's HP is greater than 0; {@code false} if HP is 0.
-     *
+     * @ensures returns true if hp is positive, false otherwise
      * @provided
      */
     public boolean isAlive() {
@@ -136,7 +137,7 @@ public class PlayerManager implements Player {
      * Moves the internal {@link Cleaner} entity to the given pixel position by directly setting
      * its x and y coordinates. Used by {@link toxiccleanup.builder.machines.Teleporter#playerOver} to
      * teleport the player to a new location instantly.
-     *
+     * @requires mockPosition not null
      * @param mockPosition the x and y pixel coordinates to move the player to.
      * @provided
      */
@@ -179,8 +180,8 @@ public class PlayerManager implements Player {
      * Adjusted by half a tile for visual offsetting.
      *
      * @param dimensions - dimensions we want to keep the player within
-     *
-     *
+     * @requires dimensions not null
+     * @ensures boundaries are stayed within (player does not move outside it)
      */
     private void enforceBoundaries(Dimensions dimensions) {
         final int offset = dimensions.tileSize() / 2;
@@ -235,7 +236,8 @@ public class PlayerManager implements Player {
      * @param game        current game state, used for retrieving, player, world or machine
      *                    related state.
      * @param underPlayer current tiles determined to be under the players current location
-     *
+     * @requires state not null
+     * @requires game and underPlayer not null
      */
     private void handlePlayerOver(EngineState state, GameState game, List<Tile> underPlayer) {
         for (Tile tile : underPlayer) {
@@ -266,7 +268,7 @@ public class PlayerManager implements Player {
      * HP cannot go below 0 or above the maximum.
      *
      * <p><span style="color:#9B59B6;">Provided:</span> Starter code only; The method signature is provided without a body.
-     *
+     * @ensures hp is decreased by amount (if positive) and clamped to [0, MAX_HP]
      * @param amount amount to subtract from the player's HP (positive = damage).
      * @provided
      */

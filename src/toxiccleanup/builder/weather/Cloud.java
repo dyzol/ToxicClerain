@@ -18,7 +18,7 @@ public class Cloud extends Cloudable {
 
     /**
      * Constructs a new Cloud at the given position.
-     *
+     * @requires position not null
      * @param position the position to place the cloud at
      */
     public Cloud(Positionable position) {

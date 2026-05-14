@@ -19,7 +19,7 @@ public class PowerBar extends GameEntity {
 
     /**
      * Constructs a {@link PowerBar} in the uncharged visual state at the given position.
-     *
+     * @requires position not null
      * @param position position we wish to spawn the uncharged powerbar at.
      */
     public PowerBar(Positionable position) {
@@ -30,7 +30,8 @@ public class PowerBar extends GameEntity {
     /**
      * Constructs a {@link PowerBar} in either the charged or uncharged visual state at
      * the given position.
-     *
+     * @requires position and charged not nulll
+     * @ensures some sprite form of bar is present (chargedbar or bar) at given position
      * @param position position we wish to spawn the charged powerbar at.
      * @param charged  a boolean flag indicating if the newly constructed PowerBar should be set
      *                 to it's charged state.

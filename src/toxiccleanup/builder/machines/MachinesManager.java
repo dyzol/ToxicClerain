@@ -37,6 +37,7 @@ public class MachinesManager implements Machines {
     /**
      * Constructs a new {@link MachinesManager} starting at full power (14). Use this
      * constructor when the game should begin with maximum power available.
+     * @ensures power is set to default power (14)
      */
     public MachinesManager() {
         power = MachinesManager.DEFAULT_POWER;
@@ -45,7 +46,8 @@ public class MachinesManager implements Machines {
     /**
      * Constructs a new {@link MachinesManager} with the given amount of starting power.
      * Maximum power is fixed at the default (14).
-     *
+     * @ensures power is clamped between 0 and 14
+     * @requires power > 0
      * @param power the starting power level; clamped to [0, 14] if out of range.
      */
     public MachinesManager(int power) {
@@ -58,6 +60,7 @@ public class MachinesManager implements Machines {
      * @param powerRequirement the minimum number of power units needed.
      * @return {@code true} if the current power is greater than or equal to
      * {@code powerRequirement}; {@code false} otherwise.
+     * @requires powerRequirement not null
      */
     @Override
     public boolean hasRequiredPower(int powerRequirement) {
@@ -76,7 +79,7 @@ public class MachinesManager implements Machines {
 
     /**
      * Sets the power to the given value, clamped to [0, maxPower (14 by default)].
-     *
+     * @requires power > 0
      * @param value the power level to set.
      */
     @Override
@@ -98,7 +101,7 @@ public class MachinesManager implements Machines {
      * Adds {@code amount} to the current power level, then clamps the result to [0, 14].
      * Pass a positive value to gain power (e.g. from a {@link SolarPanel}) or a negative
      * value to spend power. This is the primary method called by machines to change power.
-     *
+     * @requires amount not null
      * @param amount the amount of power to add; use a negative value to subtract.
      */
     @Override
@@ -110,7 +113,8 @@ public class MachinesManager implements Machines {
      * Increase power available by the given amount.
      * Note: Power is capped at a maximum of 14, if it would go above 14,
      * it will instead round back down to 14.
-     *
+     * @requires amount > 0
+     * @ensures power is increased by amount
      * @param amount amount to increase the power by.
      */
     private void gainPower(int amount) {
@@ -122,7 +126,8 @@ public class MachinesManager implements Machines {
      * Attempts to create a {@link SolarPanel} at the given location. If the current power is
      * at least 3 (the solar panel's cost), deducts 3 power and returns the new instance.
      * Returns {@code null} if there is insufficient power.
-     *
+     * @ensures if power >= cost, solarpanel is spawned
+     * @requires position not null
      * @param position the position we wish to spawn the {@link SolarPanel} at.
      * @return the newly created {@link SolarPanel}, or {@code null} if power &lt; 3.
      */
@@ -139,7 +144,8 @@ public class MachinesManager implements Machines {
      * Attempts to create a {@link LightningRod} at the given location. If the current power is
      * at least 1 (the lightning rod's cost), deducts 1 power and returns the new instance.
      * Returns {@code null} if there is insufficient power.
-     *
+     * @requires position not null
+     * @ensures if power >= cost, lightningrod is spawned
      * @param position the position we wish to spawn the {@link LightningRod} at.
      * @return the newly created {@link LightningRod}, or {@code null} if power &lt; 1.
      */
@@ -158,7 +164,8 @@ public class MachinesManager implements Machines {
      * at least 2 (the teleporter's cost), deducts 2 power, records the teleporter's position
      * for future {@link #getNextTeleporterPosition} calls, and returns the new instance.
      * Returns {@code null} if there is insufficient power.
-     *
+     * @requires position not null
+     * @ensures when power >= cost, new teleporter is spawned at given position
      * @param position the position we wish to spawn the {@link Teleporter} at.
      * @return the newly created {@link Teleporter}, or {@code null} if power &lt; 2.
      */
@@ -180,6 +187,9 @@ public class MachinesManager implements Machines {
      *
      * @param excludedPosition the position of the teleporter the player is currently standing on;
      *                         will be excluded from the random selection when possible.
+     * @requires excludedPosition not null
+     * @ensures a teleporter position is returned, itself when just one, random other when more
+     * than one teleporter
      * @return the next position ({@link Positionable}) from stored {@link Teleporter} positions.
      */
     @Override
@@ -216,6 +226,7 @@ public class MachinesManager implements Machines {
      * @param position   the position we wish to spawn the {@link Pump} at.
      * @param adjustable the object (e.g. a {@link toxiccleanup.builder.entities.tiles.ToxicField}) whose
      *                   adjustable value will be reduced each time the pump fires.
+     * @requires position and adjustable not null
      * @return the newly created {@link Pump}, or {@code null} if power &lt; 5.
      */
     @Override
@@ -234,6 +245,8 @@ public class MachinesManager implements Machines {
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.wd
+     * @requires state not null
+     * @requires game not null
      */
     @Override
     public void tick(EngineState state, GameState game) {

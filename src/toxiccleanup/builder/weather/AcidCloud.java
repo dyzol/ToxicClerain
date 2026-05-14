@@ -6,20 +6,20 @@ import toxiccleanup.builder.Damage;
 import toxiccleanup.builder.SpriteGallery;
 
 /**
- * <p> A {@link AcidCloud} is a weather phenomena that will move to the left, over time. </p>
- * <p> It damages any machine that it shares a tile with, changing them to their damaged state </p>
- * <p> Plays an animation loop endlessly using sprites from {@link SpriteGallery#acidcloud}. </p>
- * <p> When it reaches the leftmost edge of the screen, it will mark itself for removal. </p>
+ * A {@link AcidCloud} is a weather phenomena that will move to the left, over time.
+ * It damages any machine that it shares a tile with, changing them to their damaged state
+ * Plays an animation loop endlessly using sprites from {@link SpriteGallery#acidcloud}.
+ * When it reaches the leftmost edge of the screen, it will mark itself for removal.
  *
  * <p> Rendered using {@link SpriteGallery#acidcloud}. </p>
- *
+ * @invariant SPAWN_TIME remains the same for the lifetime of the AcidCloud object
  */
 public class AcidCloud extends Cloudable implements Damaging {
     public static final int SPAWN_TIME = 300;
 
     /**
      * Constructs a new AcidCloud at the given position.
-     *
+     * @requires position not null
      * @param position the position to place the acid cloud at
      */
     public AcidCloud(Positionable position) {
@@ -32,6 +32,8 @@ public class AcidCloud extends Cloudable implements Damaging {
      * @param dimensions screen dimensions (unused)
      * @param position requested position (unused)
      * @return Damage object at this cloud's position
+     * @requires dimensions not null
+     * @requires position not null
      */
     @Override
     public Damage getDamage(Dimensions dimensions, Positionable position) {

@@ -29,6 +29,9 @@ public class WeatherSpawnManager {
      *
      * @param state current engine state (mouse, keyboard, dimensions)
      * @param game current game state (world, weather, machines)
+     * @requires state not null
+     * @requires game not null
+     * @ensures spawnPoints are ticked by one tick
      */
     void tick(EngineState state, GameState game) {
         for (WeatherSpawnPoint spawnPoint : spawnPoints) {

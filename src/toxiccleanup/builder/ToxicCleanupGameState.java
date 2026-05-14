@@ -33,8 +33,8 @@ public class ToxicCleanupGameState implements GameState {
      * @param world    the current game world, used to query and modify tiles.
      * @param player   the player manager, used to query position, HP, and move the player.
      * @param machines the machine manager, used to query power and spawn machines.
+     * @requires world, player, machines, weather not null
      */
-
     public ToxicCleanupGameState(World world, PlayerManager player, Machines machines,
                                  Weather weather) {
         this.world = world;
@@ -47,7 +47,7 @@ public class ToxicCleanupGameState implements GameState {
      * Constructs a new {@link ToxicCleanupGameState} wrapping only the player manager.
      * Use this constructor when only player-related state is needed and world or machine
      * access is not required.
-     *
+     * @requires player not null
      * @param player the player manager, used to query position, HP, and move the player.
      */
     public ToxicCleanupGameState(PlayerManager player) {

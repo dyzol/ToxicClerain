@@ -127,7 +127,7 @@ public class Lightning extends GameEntity implements Damaging, Attractable {
     }
 
     /** Moves a lightning bolt to target position when attracted by lightning rod
-     *
+     * @requires targetPosition not null
      * @param targetPosition the position to attract to
      */
     @Override

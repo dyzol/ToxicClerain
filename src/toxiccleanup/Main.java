@@ -42,6 +42,7 @@ public class Main {
      * Helper method to run the game loop.
      *
      * @param engine The {@link Engine} instance to execute.
+     * @requires engine not null
      */
     private static void run(Engine engine) {
         while (engine.isRunning()) {

@@ -108,6 +108,7 @@ public abstract class Tile extends GameEntity implements PlayerOverHook, Rendera
      * Removes any stacked entities that are marked for removal.
      * Loops through the stackEntities list backwards so as we remove entities
      * we do not affect the position of future entities in the list.
+     * @ensures only stcaked entities marked for removal are removed
      */
     private void cleanup() {
         for (int i = this.stackedEntities.size() - 1; i >= 0; i -= 1) {
@@ -169,6 +170,8 @@ public abstract class Tile extends GameEntity implements PlayerOverHook, Rendera
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     * @requires state not null
+     * @requires game not null
      */
     @Override
     public void playerOver(EngineState state, GameState game) {

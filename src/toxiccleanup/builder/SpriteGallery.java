@@ -100,6 +100,9 @@ public class SpriteGallery {
      *
      * @param spriteFilename The name of the file under resources/art/ to load.
      * @param groupName      The common prefix of sprites within the given file.
+     * @requires spriteFilename can be found under resources/art/
+     * @requires groupName to exist in the spriteFilenames
+     * @throws RuntimeException when art cannot be found or is malformed or there's an IO exception
      */
     private static SpriteGroup load(String spriteFilename, String groupName) {
         try {

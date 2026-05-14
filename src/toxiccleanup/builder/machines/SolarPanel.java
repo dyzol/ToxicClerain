@@ -110,7 +110,8 @@ public class SolarPanel extends GameEntity implements PlayerOverHook {
      * Called when the player is on top of this object. Intended for handling
      * any interaction that occurs while the player overlaps the
      * corresponding tile or entity.
-     *
+     * @requires state and game not null
+     * @ensures if 'e' is pressed and currently damaged, damage is repaired
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or

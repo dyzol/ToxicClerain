@@ -25,8 +25,8 @@ import toxiccleanup.builder.weather.Weather;
  * <p>Costs {@value COST} power units to build.</p>
  * <p>Rendered using {@link SpriteGallery#chasm}.</p>
  * @invariant damageHandler never null
- * @invariant RADIUS always constant, and {@value RADIUS}
- * @invariant cost always {@value COST} and constant
+ * @invariant RADIUS, {@value RADIUS}, always constant
+ * @invariant cost, {@value COST}, always constant
  * @provided
  */
 public class LightningRod extends GameEntity implements PlayerOverHook, Damageable {

@@ -39,7 +39,7 @@ public class WeatherManager implements Weather {
     private final LightningManager lightningManager;
 
     /** Constructor that initialises submanagers: queryManager and lightningManager
-     *
+     * @ensures queryManager and lightningManager exist
      */
     public WeatherManager() {
         this.queryManager = new WeatherQueryManager(phenomena);
@@ -49,7 +49,7 @@ public class WeatherManager implements Weather {
     /**
      * Add the given spawnPoint to the weather manager for it to handle ticking it and
      * any other game logic.
-     *
+     * @requires spawnPoint not null
      * @param spawnPoint - spawn point we wish top use
      */
     public void addSpawnPoint(WeatherSpawnPoint spawnPoint) {
@@ -73,6 +73,8 @@ public class WeatherManager implements Weather {
      * @param position   - position requesting for the obscured status of
      * @return if the given title location should be currently obscured by the
      * internal weather system.
+     * @requires dimensions not null
+     * @requires position not null
      */
     @Override
     public boolean isObscuring(Dimensions dimensions, Positionable position) {
@@ -87,6 +89,8 @@ public class WeatherManager implements Weather {
      * @param position   - position requesting for the damage status of
      * @return {@link Damage} the given tile location is currently experiencing otherwise
      * returns null.
+     * @requires dimensions not null
+     * @requires position not null
      */
     public Damage getDamage(Dimensions dimensions, Positionable position) {
         return queryManager.getDamage(dimensions, position);
@@ -107,6 +111,8 @@ public class WeatherManager implements Weather {
      * @param dimensions - screen and tile dimensions
      * @param position   - position requesting for the damage status of
      * @return if the given tile location is experiencing damaging conditions.
+     * @requires dimensions not null
+     * @requires position not null
      */
     @Override
     public boolean isDamaging(Dimensions dimensions, Positionable position) {
@@ -117,7 +123,7 @@ public class WeatherManager implements Weather {
      * Receives the position of a {@link LightningRod} and adjusts the weather system accordingly.
      * Moves any {@link Lightning} that are within the radius {@value LightningRod#RADIUS}
      * of the given position to the given position.
-     *
+     * @requires position not null
      * @param position - position of the lightning rod that the weather should be adjusted for.
      */
     @Override
@@ -132,6 +138,8 @@ public class WeatherManager implements Weather {
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     * @requires state not null
+     * @requires game not null
      */
     @Override
     public void tick(EngineState state, GameState game) {

@@ -18,7 +18,7 @@ public class Heart extends GameEntity {
 
     /**
      * Constructs a new {@link Heart} instance.
-     *
+     * @requires position not null
      * @param position position we wish the heart to be spawned at.
      */
     public Heart(Positionable position) {

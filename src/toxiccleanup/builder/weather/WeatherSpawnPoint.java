@@ -27,6 +27,9 @@ public class WeatherSpawnPoint implements Tickable {
      * @param spawner  - the {@link Spawner} we intend to call whenever the {@link TickTimer}
      *                 is finished.
      * @ensures getPosition() returns a copy of the given position
+     * @requires position not null
+     * @requires timer not null
+     * @requires spawner not null
      */
     public WeatherSpawnPoint(Positionable position, TickTimer timer, Spawner spawner) {
         this.position = position;
@@ -50,6 +53,8 @@ public class WeatherSpawnPoint implements Tickable {
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     * @requires state not null
+     * @requires game not null
      */
     @Override
     public void tick(EngineState state, GameState game) {

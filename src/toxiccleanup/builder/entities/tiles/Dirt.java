@@ -25,7 +25,7 @@ import toxiccleanup.engine.game.Positionable;
  *
  * <p>Both actions delegate to {@link Machines} which checks whether sufficient
  * power is available before constructing the machine. If power is insufficient, nothing is built.
- *
+ * @invariant pave key is f for the lifetime of dirt tile
  * @multistage
  */
 public class Dirt extends Tile implements PlayerOverHook {
@@ -73,7 +73,7 @@ public class Dirt extends Tile implements PlayerOverHook {
      * spawn succeeds (i.e. sufficient power was available), the new solar panel is placed on
      * top of this tile via {@link #placeOn}. If the spawn returns {@code null} (insufficient
      * power), nothing happens.
-     *
+     * @requires spawner not null and belongs to Machines class
      * @param spawner the {@link Machines} instance used to attempt spawning the {@link SolarPanel}.
      */
     public void attemptSpawnSolarPanel(Machines spawner) {
@@ -88,7 +88,7 @@ public class Dirt extends Tile implements PlayerOverHook {
      * spawn succeeds (i.e. sufficient power was available), the new lightning rod is placed on
      * top of this tile via {@link #placeOn}. If the spawn returns {@code null} (insufficient
      * power), nothing happens.
-     *
+     * @requires spawner not null
      * @param spawner the {@link Machines} instance used to attempt spawning the {@link SolarPanel}.
      */
     public void attemptSpawnLightningRod(Machines spawner) {
@@ -103,7 +103,7 @@ public class Dirt extends Tile implements PlayerOverHook {
      * spawn succeeds (i.e. sufficient power was available), the new teleporter is placed on
      * top of this tile via {@link #placeOn}, and its position is registered for future
      * teleportation. If the spawn returns {@code null} (insufficient power), nothing happens.
-     *
+     * @requires spawner not null
      * @param spawner the {@link Machines} instance used to attempt spawning the {@link Teleporter}.
      */
     public void attemptSpawnTeleporter(Machines spawner) {
@@ -123,7 +123,8 @@ public class Dirt extends Tile implements PlayerOverHook {
      * left-click attempts to place a {@link SolarPanel}, right-click attempts to place a {@link Teleporter}.
      * - Any placed machine is added to this tile; if placement fails (e.g. insufficient power), no machine is added.
      * - Player-over behaviour of stacked entities on this tile is also applied.
-     *
+     * @requires state not null
+     * @requires game not null
      * @param state current engine input/state.
      * @param game  current game state.
      */

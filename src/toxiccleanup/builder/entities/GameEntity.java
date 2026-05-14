@@ -24,7 +24,7 @@ public class GameEntity extends Entity implements Tickable, Positionable {
      * Constructs a {@link GameEntity} at the given position. Extracts the x and y pixel
      * coordinates from the {@link Positionable} and passes them to the engine's
      * {@link Entity} constructor, which stores them internally.
-     *
+     * @requires position not null
      * @param position the position we wish the {@link GameEntity} to be spawned at.
      * @provided
      */
@@ -53,6 +53,8 @@ public class GameEntity extends Entity implements Tickable, Positionable {
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     * @requires state not null
+     * @requires game not null
      * @provided
      */
     @Override

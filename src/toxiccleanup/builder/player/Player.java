@@ -22,7 +22,7 @@ public interface Player extends Tickable, RenderableGroup, Harmable {
 
     /**
      * Sets the horizontal (x-axis) and vertical (y-axis) coordinate of the player entity.
-     *
+     * @requires mockPosition not null
      * @param mockPosition the position
      */
     void setPosition(Positionable mockPosition);

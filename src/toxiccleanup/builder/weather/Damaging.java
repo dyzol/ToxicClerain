@@ -15,6 +15,8 @@ public interface Damaging {
      * @param dimensions screen and tile dimensions
      * @param position position the position to check for damage
      * @return a {@link Damage} object if damage is present, null otherwise
+     * @requires dimensions not null
+     * @requires position not null
      */
     public Damage getDamage(Dimensions dimensions, Positionable position);
 

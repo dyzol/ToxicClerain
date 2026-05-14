@@ -50,7 +50,7 @@ public class Pump extends GameEntity implements Powered, PlayerOverHook {
      * every 4 ticks and a pump timer that fires every 100 ticks. The given {@link Adjustable}
      * is the target whose value is reduced by 1 each time the pump timer fires (provided
      * sufficient power is available).
-     *
+     * @requires position and pumpTarget not null
      * @param position   the position we wish to spawn this Pump at.
      * @param pumpTarget the object whose adjustable value (e.g. toxicity) will be reduced
      *                   each time the pump fires.
@@ -68,7 +68,8 @@ public class Pump extends GameEntity implements Powered, PlayerOverHook {
     /**
      * Handles updating the anim to the next sprite,
      * adjusting our internal index and resetting it to the start if we go past the final index.
-     *
+     * @ensures animation index is incremented or reset to start
+     * @ensures sprite is updated according to animIndex
      */
     private void updateArt() {
         animIndex += 1;
@@ -93,7 +94,9 @@ public class Pump extends GameEntity implements Powered, PlayerOverHook {
      *
      * <p>If power drops below 2, the animation freezes and no pumping occurs until power
      * is restored.
-     *
+     * @requires state not null
+     * @requires game not null
+     * @ensures damaged pump does not continue animating, pumping and removing toxicity
      * @param state The state of the engine, including the mouse, keyboard information and
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, providing access to the machine power system.
@@ -124,6 +127,18 @@ public class Pump extends GameEntity implements Powered, PlayerOverHook {
         }
     }
 
+    /**
+     * Handles the situation when player is on the tile in question and queries gamestate and enginestate
+     * for action. For instance using the USE_KEY 'e' is pressed the damageHandler will toggle whether it's
+     * damaged.
+     * @ensures whether it is damaged is updated if damaged and 'e' is pressed
+     * @param state The state of the engine, including the mouse, keyboard information and
+     *              dimension. Useful for processing keyboard presses or mouse movement.
+     * @param game  The state of the game, including the player and world. Can be used to query or
+     *              update the game state.
+     * @requires state not null
+     * @requires game not null
+     */
     @Override
     public void playerOver(EngineState state, GameState game) {
         if (!state.getKeys().isDown(Pump.USE_KEY)) {

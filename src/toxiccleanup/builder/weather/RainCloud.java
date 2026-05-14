@@ -19,7 +19,7 @@ public class RainCloud extends Cloudable {
 
     /**
      * Constructs a new RainCloud at the given position.
-     *
+     * @requires position not null
      * @param position the position to place the rain cloud at
      */
     public RainCloud(Positionable position) {

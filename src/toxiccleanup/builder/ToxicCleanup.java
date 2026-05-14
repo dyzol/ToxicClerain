@@ -52,6 +52,8 @@ public class ToxicCleanup implements Game {
      * @param weatherFilepath path to the weather map file
      * @throws IOException if a map file cannot be read
      * @throws WorldLoadException if a map file contains invalid data
+     * @requires dimensions, startTeleporterPosition not null
+     * @requires worldFilepath and weatherFilepath to exist and be accessible
      */
     public ToxicCleanup(Dimensions dimensions, Positionable starterTeleporterPosition,
                         String worldFilepath, String weatherFilepath) throws IOException,
@@ -92,6 +94,7 @@ public class ToxicCleanup implements Game {
      *                                  {@link Teleporter}.
      * @throws IOException        if the target map file could not be read.
      * @throws WorldLoadException if the target map file failed to parse.
+     * @requires dimensions, startTeleporterPosition not null
      * @hint map file can be found at "resources/wasteland.map".
      * @provided
      */
@@ -112,7 +115,8 @@ public class ToxicCleanup implements Game {
     /**
      * Support method only here for testing purposes, so we can teleport
      * the player to given locations.
-     *
+     * @requires position.getX() >= 0, position.getX() is less than the window width
+     * @requires position.getY() >= 0, position.getY() is less than the window height
      * @param position position we wish to move the player to.
      */
     public void movePlayer(Positionable position) {
@@ -122,7 +126,7 @@ public class ToxicCleanup implements Game {
     /**
      * Support method only here for testing purposes, so we can set the game to
      * a specified power level to test from.
-     *
+     * @requires power not null
      * @param power amount we wish to set the internal current power to.
      */
     public void setPower(int power) {
@@ -132,7 +136,7 @@ public class ToxicCleanup implements Game {
     /**
      * Lets us spawn a teleporter outside the game loop, useful as maps generally
      * should start with at least one teleporter already on them.
-     *
+     * @requires dimensions, position not null
      * @param position   position we wish to spawn the teleporter at
      * @param dimensions used for tile size calculations
      */
@@ -172,6 +176,7 @@ public class ToxicCleanup implements Game {
      * and advances the damage timer dealing 1 damage to the player every 1800 ticks.
      *
      * @param engine current engine input/state.
+     * @requires engine not null
      * @ensures If the player is dead at end-state evaluation, the lose overlay is shown.
      * @ensures If no toxic fields remain at end-state evaluation, the win overlay is shown.
      * @ensures If neither end condition holds, gameplay progresses normally and periodic damage

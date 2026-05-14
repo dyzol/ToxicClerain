@@ -40,6 +40,7 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
      * @param position the position to place the cloud at
      * @param art the sprite group for this cloud type
      * @param movementTimer custom movement timer
+     * @requires position, art, movementTimer not null
      */
     protected Cloudable(Positionable position, SpriteGroup art, TickTimer movementTimer) {
         super(position);
@@ -55,6 +56,7 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
      *
      * @param position the position to place the cloud at
      * @param art the sprite group for this cloud type
+     * @requires position, art not null
      */
     protected Cloudable(Positionable position, SpriteGroup art) {
         this(position, art, new RepeatingTimer(MOVEMENT_TIME));
@@ -63,6 +65,7 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
     /**
      * Updates the animation frame.
      * Loops back to frame 1 after reaching the last frame.
+     * @ensures animation either increments frame or loops back to start
      */
     private void updateAnimation() {
         animTimer.tick();
@@ -78,6 +81,7 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
     /**
      * Updates the cloud's position.
      * Moves left at constant speed.
+     * @ensures ticks movementTimer and cloud moves by SPEED pixels in x
      */
     private void updateMovement() {
         movementTimer.tick();
@@ -88,6 +92,7 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
 
     /**
      * Checks if cloud has moved off-screen and marks for removal if so.
+     * @ensures if cloud has x < 0, is marked for removal
      */
     private void checkBoundary() {
         if (getX() < 0) {
@@ -101,6 +106,8 @@ public abstract class Cloudable extends GameEntity implements Obscuring {
      *
      * @param state The state of the engine
      * @param game  The state of the game
+     * @requires state, game not null
+     * @ensures animation and movement are updated for one tick and boundary is checked
      */
     @Override
     public void tick(EngineState state, GameState game) {

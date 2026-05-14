@@ -16,6 +16,8 @@ public interface Tickable {
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     * @requires state not null
+     * @requires game not null
      */
     void tick(EngineState state, GameState game);
 }

@@ -59,6 +59,9 @@ public class GuiManager implements Overlay {
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     * @requires state not null
+     * @requires game not null
+     * @ensures each tick the HUD elements are rendered based on up-to-date stats
      */
     @Override
     public void tick(EngineState state, GameState game) {
@@ -99,6 +102,8 @@ public class GuiManager implements Overlay {
      *
      * @param state the current engine state, used to determine window dimensions for
      *              positioning the text in the centre of the screen.
+     * @requires state not null
+     * @ensures when called, player sees you win message
      */
     public void win(EngineState state) {
         final int windowsize = state.getDimensions().windowSize();
@@ -111,9 +116,10 @@ public class GuiManager implements Overlay {
      * Switches the GUI to display a centred "GAME OVER" message. Called by
      * {@link toxiccleanup.builder.ToxicCleanup#tick} when the player's HP reaches 0.
      * Once set, the game-over message is rendered on every subsequent call to {@link #render()}.
-     *
+     * @requires state not null
      * @param state The state of the engine, used to determine window dimensions for
      *              positioning the text in the centre of the screen.
+     * @ensures when called, player sees game over message
      */
     public void lose(EngineState state) {
         final int windowsize = state.getDimensions().windowSize();
@@ -125,7 +131,8 @@ public class GuiManager implements Overlay {
      * Creates a vertical column of {@link Heart} icons starting at {@code position}, spaced
      * one tile apart downward. One heart is created per remaining HP point. Called each tick
      * by {@link #tick} with the player's current HP to rebuild the HP display.
-     *
+     * @requires position not null and numOfHearts not null
+     * @requires numOfHearts equal to player's current HP
      * @param position    the screen position of the first (topmost) heart icon.
      * @param numOfHearts the number of hearts to create, equal to the player's current HP.
      * @return a list of {@link Heart} instances positioned vertically down the screen.
@@ -146,7 +153,8 @@ public class GuiManager implements Overlay {
      * spaced one tile apart downward. The first {@code powerThreshold} segments are rendered
      * as charged (power available); the remaining segments are uncharged (power spent).
      * Called each tick by {@link #tick} to rebuild the power display.
-     *
+     * @requires position, numOfPowerBars, powerThreshold not null
+     * @ensures at most numOfPowerBars power bars are charged
      * @param position       the screen position of the first (topmost) power bar segment.
      * @param numOfPowerBars the total number of segments to create, equal to max power (14).
      * @param powerThreshold the number of charged segments, equal to the current power level.

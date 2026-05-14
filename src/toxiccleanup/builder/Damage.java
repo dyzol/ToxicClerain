@@ -31,7 +31,7 @@ public class Damage implements Positionable {
      * Sets the type of this damage.
      * Damage types are used to identify the source of damage
      * so that certain machines can be immune to specific damage types.
-     *
+     * @requires value not null
      * @param value the damage type identifier
      */
     public void setType(String value) {

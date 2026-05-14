@@ -28,7 +28,7 @@ public class SpawnerFactory {
 
     /**
      * Constructs a new {@link WeatherSpawnPoint} based on the symbol at the given position.
-     *
+     * @ensures correct letters will spawn their corresponding weather entities
      * @param position the position to place the spawn point at
      * @param symbol   the map symbol (c, C, r, R, a, A, l, L, or _)
      * @return a new WeatherSpawnPoint, or null if symbol is '_'

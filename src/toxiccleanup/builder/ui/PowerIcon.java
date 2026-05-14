@@ -16,7 +16,7 @@ public class PowerIcon extends GameEntity {
 
     /**
      * Constructs a new {@link PowerIcon} instance.
-     *
+     * @requires position not null
      * @param position position we wish the PowerIcon to be spawned at.
      */
     public PowerIcon(Positionable position) {

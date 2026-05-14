@@ -22,7 +22,7 @@ public interface Adjustable {
     /**
      * Adjusts a key internal adjustable value by the given amount.
      * Each implementation may decide how it intends to use the amount for its adjustment.
-     *
+     * @requires amount not null
      * @param amount amount we wish to adjust value by (positive is increase, negative decrease)
      */
     void adjust(int amount);

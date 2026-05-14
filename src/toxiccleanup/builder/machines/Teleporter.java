@@ -111,6 +111,7 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
      *              dimension. Useful for processing keyboard presses or mouse movement.
      * @param game  The state of the game, including the player and world. Can be used to query or
      *              update the game state.
+     *
      */
     @Override
     public void playerOver(EngineState state, GameState game) {
@@ -157,7 +158,8 @@ public class Teleporter extends GameEntity implements PlayerOverHook, Powered, D
      * Sets the Damageable Object to its damaged state.
      * When damaged, the teleporter shows a "damaged" sprite and
      * cannot be used for teleportation until repaired.
-     *
+     * @ensures isDamaged returns true
+     * @requires dmg not null
      * @param dmg the damage object describing what damaged this teleporter
      */
     @Override

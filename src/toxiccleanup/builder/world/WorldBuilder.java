@@ -49,6 +49,8 @@ public class WorldBuilder {
      * @throws WorldLoadException If any character doesn't correspond to a tile according to {@link
      *                            TileFactory#fromSymbol(engine.game.Positionable, char)}.
      * @requires dimensions.windowSize() % dimensions.tileSize() == 0
+     * @requires dimensions not null
+     * @requires text not null
      */
     public static List<Tile> fromString(Dimensions dimensions, String text)
             throws WorldLoadException {
@@ -102,6 +104,8 @@ public class WorldBuilder {
      *                            as thrown by {@link FileManager#readFile(String)}.
      * @throws WorldLoadException If the tile encoding is invalid (according to {@link
      *                            #fromString(Dimensions, String)}).
+     * @requires dimensions not null
+     * @requires filepath not null
      */
     public static ToxicWorld fromFile(Dimensions dimensions, String filepath)
             throws IOException, WorldLoadException {

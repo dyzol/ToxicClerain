@@ -23,7 +23,7 @@ public class WorldLoadException extends Exception {
 
     /**
      * Constructs a new world load exception with a message detailing the problem.
-     *
+     * @requires message not null
      * @param message Explanation of the problem that occurred.
      */
     public WorldLoadException(String message) {
@@ -32,7 +32,8 @@ public class WorldLoadException extends Exception {
 
     /**
      * Constructs a new world load exception that occurred loading a particular row.
-     *
+     * @requires message not null
+     * @requires row not null
      * @param message Explanation of the problem that occurred.
      * @param row     The row number where the error occurred. Indicates the issue occurs on line row +
      *                1.
@@ -45,6 +46,9 @@ public class WorldLoadException extends Exception {
     /**
      * Constructs a new world load exception that occurred loading a particular row and column.
      *
+     * @requires message not null
+     * @requires row not null
+     * @requires column not null
      * @param message Explanation of the problem that occurred.
      * @param row     The row number where the error occurred. Indicates the issue occurs on line row +
      *                1.

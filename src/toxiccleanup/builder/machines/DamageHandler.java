@@ -31,6 +31,7 @@ public class DamageHandler implements Damageable {
     /**
      * Sets the Damageable Object to it's damaged state.
      * @ensures isDamaged returns true
+     * @requires dmg not null
      * @param dmg the damage object (ignored by this implementation)
      */
     @Override
