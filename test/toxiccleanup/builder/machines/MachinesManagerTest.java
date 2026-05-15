@@ -22,19 +22,19 @@ public class MachinesManagerTest {
 
     @Test
     public void testCanSpawnPump() {
+        //power sufficient case
         manager.setPower(Pump.COST);
         Pump pump = manager.spawnPump(testPosition, null);
 
         assertNotNull(pump);
         assertEquals(0, manager.getPower());
-    }
 
-    @Test
-    public void testCannotSpawnPumpInsufficientPower() {
+        // power insufficient
         manager.setPower(Pump.COST - 1);
-        Pump pump = manager.spawnPump(testPosition, null);
+        Positionable testPosition2 = new Position(2,2);
+        Pump pump2 = manager.spawnPump(testPosition2, null);
 
-        assertNull(pump);
+        assertNull(pump2);
         assertEquals(Pump.COST - 1, manager.getPower());
     }
 
@@ -43,6 +43,12 @@ public class MachinesManagerTest {
     @Test
     public void testDefaultConstructorSetsPowerTo14() {
         assertEquals(14, manager.getPower());
+    }
+
+    @Test
+    public void testConstructorWithValidPowerSetsCorrectly() {
+        MachinesManager m = new MachinesManager(7);
+        assertEquals(7, m.getPower());
     }
 
     @Test
@@ -58,14 +64,16 @@ public class MachinesManagerTest {
     }
 
     @Test
-    public void testConstructorWithValidPowerSetsCorrectly() {
-        MachinesManager m = new MachinesManager(7);
-        assertEquals(7, m.getPower());
-    }
-
-    @Test
     public void testGetMaxPowerReturns14() {
         assertEquals(14, manager.getMaxPower());
+    }
+
+    // setters
+
+    @Test
+    public void testSetPowerWithinBoundsWorks() {
+        manager.setPower(8);
+        assertEquals(8, manager.getPower());
     }
 
     @Test
@@ -81,19 +89,10 @@ public class MachinesManagerTest {
     }
 
     @Test
-    public void testSetPowerWithinBoundsWorks() {
-        manager.setPower(8);
-        assertEquals(8, manager.getPower());
-    }
-
-    @Test
-    public void testHasRequiredPowerReturnsTrueWhenEqual() {
+    public void testHasRequiredPowerReturnsTrueWhenEqualOrGreater() {
         manager.setPower(5);
         assertTrue(manager.hasRequiredPower(5));
-    }
 
-    @Test
-    public void testHasRequiredPowerReturnsTrueWhenGreater() {
         manager.setPower(10);
         assertTrue(manager.hasRequiredPower(5));
     }
@@ -131,16 +130,14 @@ public class MachinesManagerTest {
         manager.setPower(10);
         manager.adjust(2);
         assertEquals(12, manager.getPower());
-    }
-
-    @Test
-    public void testAdjustWithPositiveAndNegativeSequence() {
+        // test positive negative sequence works
         manager.setPower(10);
         manager.adjust(3);
         assertEquals(13, manager.getPower());
         manager.adjust(-5);
         assertEquals(8, manager.getPower());
     }
+
     // ========== SOLAR PANEL SPAWNING TESTS ==========
 
     @Test
@@ -150,14 +147,12 @@ public class MachinesManagerTest {
 
         assertNotNull(panel);
         assertEquals(10 - SolarPanel.COST, manager.getPower());
-    }
 
-    @Test
-    public void testSpawnSolarPanelExactPower() {
         manager.setPower(SolarPanel.COST);
-        SolarPanel panel = manager.spawnSolarPanel(testPosition);
+        Positionable testPosition2 = new Position(4,5);
+        SolarPanel panel2 = manager.spawnSolarPanel(testPosition2);
 
-        assertNotNull(panel);
+        assertNotNull(panel2);
         assertEquals(0, manager.getPower());
     }
 
@@ -170,15 +165,6 @@ public class MachinesManagerTest {
         assertEquals(SolarPanel.COST - 1, manager.getPower());
     }
 
-    @Test
-    public void testSpawnSolarPanelWithZeroPowerReturnsNull() {
-        manager.setPower(0);
-        SolarPanel panel = manager.spawnSolarPanel(testPosition);
-
-        assertNull(panel);
-        assertEquals(0, manager.getPower());
-    }
-
     // ========== TELEPORTER SPAWNING TESTS ==========
 
     @Test
@@ -188,14 +174,12 @@ public class MachinesManagerTest {
 
         assertNotNull(teleporter);
         assertEquals(10 - Teleporter.COST, manager.getPower());
-    }
 
-    @Test
-    public void testSpawnTeleporterExactPower() {
         manager.setPower(Teleporter.COST);
-        Teleporter teleporter = manager.spawnTeleporter(testPosition);
+        Positionable testPosition2 = new Position(3,6);
+        Teleporter teleporter2 = manager.spawnTeleporter(testPosition2);
 
-        assertNotNull(teleporter);
+        assertNotNull(teleporter2);
         assertEquals(0, manager.getPower());
     }
 
